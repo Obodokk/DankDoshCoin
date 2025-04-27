@@ -19,6 +19,7 @@
             <button class="tab-button" data-tab="upgrades">Улучшения</button>
             <button class="tab-button" data-tab="achievements">Достижения</button>
             <button class="tab-button" data-tab="stats">Статистика</button>
+            <button class="tab-button" data-tab="referral">Рефералы</button>
         </div>
 
         <div class="tab-content active" id="main">
@@ -229,6 +230,26 @@
                             <div class="progress-fill" id="stats-level-progress"></div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="referral">
+            <h2 class="tab-title">Реферальная система</h2>
+            <div class="referral-container">
+                <div class="stat-card">
+                    <h3>Приглашено друзей</h3>
+                    <span id="referral-count">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Ваша реферальная ссылка</h3>
+                    <input type="text" id="referral-link" readonly>
+                    <button id="copy-referral">Копировать</button>
+                </div>
+                <div class="stat-card" id="referral-bonus-card">
+                    <h3>Бонус за 3 друзей</h3>
+                    <span id="referral-bonus-status">Недоступно</span>
+                    <button id="claim-referral-bonus">Получить 5000 DDC</button>
                 </div>
             </div>
         </div>
