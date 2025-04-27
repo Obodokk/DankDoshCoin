@@ -118,7 +118,6 @@ body {
     text-align: center;
 }
 
-/* Main Tab Styles */
 .balance-container {
     background-color: var(--dark-color);
     padding: 15px;
@@ -180,7 +179,6 @@ body {
     color: var(--secondary-color);
 }
 
-/* Energy Bar */
 .energy-container {
     background-color: var(--dark-color);
     padding: 15px;
@@ -354,7 +352,6 @@ body {
     color: var(--light-color);
 }
 
-/* Upgrades Tab Styles */
 .upgrades-grid {
     display: flex;
     flex-direction: column;
@@ -460,7 +457,6 @@ body {
     font-weight: bold;
 }
 
-/* Achievements Tab Styles */
 .achievements-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -518,7 +514,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Stats Tab Styles */
 .stats-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -554,7 +549,6 @@ body {
     height: 6px;
 }
 
-/* Combo System */
 .combo-container {
     position: fixed;
     top: 10px;
@@ -590,7 +584,6 @@ body {
     font-size: 0.8rem;
 }
 
-/* Notification */
 .notification {
     position: fixed;
     bottom: 20px;
@@ -618,7 +611,6 @@ body {
     }
 }
 
-/* Boost Indicator */
 .boost-indicator {
     position: fixed;
     top: 50px;
@@ -633,7 +625,45 @@ body {
     display: none;
 }
 
-/* Responsive */
+.referral-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#referral-link {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid var(--secondary-color);
+    background-color: var(--dark-color);
+    color: var(--light-color);
+}
+
+#copy-referral, #claim-referral-bonus {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+#copy-referral:hover, #claim-referral-bonus:hover {
+    background: var(--accent-color);
+}
+
+#referral-bonus-status {
+    display: block;
+    margin: 10px 0;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
 @media (min-width: 480px) {
     .app-container {
         max-width: 480px;
@@ -658,6 +688,10 @@ body {
     }
 
     .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .referral-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
