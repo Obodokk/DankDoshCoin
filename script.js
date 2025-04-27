@@ -150,11 +150,19 @@ function initGame() {
     setupEventListeners();
 
     // Инициализация изображения монеты
-    elements.coin.innerHTML = `
+elements.coin.innerHTML = `
+    <div class="no-select">
         <img src="https://github.com/Obodokk/DankDoshCoin/blob/main/DankDoshCoin.png?raw=true" 
              alt="DankDoshCoin" 
              class="coin-image">
-    `;
+    </div>
+`;
+
+document.addEventListener('selectstart', function(e) {
+    if (e.target === elements.coin || e.target.closest('.coin')) {
+        e.preventDefault();
+    }
+});
 
     // Запуск игровых циклов
     setInterval(gameLoop, 1000);
