@@ -37,6 +37,14 @@ body {
     font-size: 18px;
 }
 
+.upgrade-card.auto .upgrade-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="4" y="3" width="8" height="10" fill="%2300cec9"/><rect x="5" y="4" width="2" height="2" fill="%23000"/><rect x="9" y="4" width="2" height="2" fill="%23000"/><rect x="6" y="7" width="4" height="3" fill="%23000"/></svg>');
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: transparent;
+}
+
 * {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
@@ -128,6 +136,47 @@ body {
     width: 100%;
     height: 3px;
     background-color: var(--accent-color);
+}
+
+/* Основное исправление для скрытия монеты */
+.tab-content:not(#main) .clicker-container {
+    display: none !important;
+}
+
+/* Дополнительные улучшения для мобильной версии */
+@media (max-width: 480px) {
+    .tab-content {
+        position: relative;
+    }
+
+    #main .clicker-container {
+        display: flex !important;
+        /* Другие стили для контейнера монеты */
+    }
+
+    /* Гарантируем, что другие вкладки занимают всё пространство */
+    #upgrades, #achievements, #stats {
+        height: calc(100% - 50px) !important;
+        overflow-y: auto;
+    }
+}
+
+/* Анимация перехода между вкладками */
+.tab-content {
+    transition: opacity 0.3s ease;
+}
+
+.tab-content:not(.active) {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.tab-content.active {
+    opacity: 1;
+    height: auto;
 }
 
 .tab-content {
@@ -654,12 +703,6 @@ body {
         padding: 10px;
     }
 
-    .tab-content#main {
-        display: flex;
-        flex-direction: column;
-        height: calc(100vh - 120px);
-        padding: 0;
-    }
 
     .coin {
         width: 85vw;
@@ -698,42 +741,15 @@ body {
     }
 }
 
+
+
 @supports (-webkit-touch-callout: none) {
     .tab-content#main {
         height: calc(100vh - 160px);
     }
 }
 
-@media (max-width: 350px) {
-    .coin {
-        width: 82vw;
-        height: 82vw;
-    }
 
-    .tab-button {
-        font-size: 0.8rem;
-        padding: 8px 4px;
-    }
-}
-
-@media (min-width: 481px) {
-    .app-container {
-        max-width: 480px;
-        margin: 0 auto;
-    }
-
-    .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .achievements-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .stats-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
 .hidden {
     display: none !important;
