@@ -2,15 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DankDoshCoin</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
-
         <div class="tabs">
             <button class="tab-button active" data-tab="main">Главная</button>
             <button class="tab-button" data-tab="upgrades">Улучшения</button>
@@ -39,7 +37,7 @@
             </div>
 
             <div class="clicker-container">
-                <div class="coin" id="coin" ontouchstart="">
+                <div class="coin" id="coin">
                     <div class="coin-inner no-select">
                         <img src="https://github.com/Obodokk/DankDoshCoin/blob/main/DankDoshCoin.png?raw=true"
                             alt="DankDoshCoin"
@@ -179,7 +177,7 @@
 
         <div class="tab-content" id="stats">
             <h2 class="tab-title">Статистика</h2>
-            <div class="stats-container">
+            <div class="stats-container" id="stats-scroll-container">
                 <div class="stat-item">
                     <h3>Всего кликов</h3>
                     <span id="stats-total-clicks">0</span>
