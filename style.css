@@ -1,10 +1,10 @@
 :root {
     --primary-color: #6c5ce7;
-    --secondary-color: #ffbd94;
-    --accent-color: #e8874c;
+    --secondary-color: #a29bfe;
+    --accent-color: #00cec9;
     --dark-color: #2d3436;
     --darker-color: #1e272e;
-    --light-color: #e87a38;
+    --light-color: #f5f6fa;
     --energy-full: #00b894;
     --energy-low: #fdcb6e;
     --energy-empty: #d63031;
@@ -49,21 +49,6 @@ body {
     position: relative;
     border: 4px solid #000;
     image-rendering: pixelated;
-}
-
-.app-header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.app-header h1 {
-    color: var(--accent-color);
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-    font-family: var(--pixel-font-alt);
-    letter-spacing: 1px;
 }
 
 .tabs {
@@ -122,17 +107,11 @@ body {
 }
 
 .tab-content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
     opacity: 1;
-    height: auto;
-}
-
-.tab-content:not(.active) {
-    opacity: 0;
-    height: 0;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
+    height: calc(100vh - 150px);
+    overflow-y: auto;
 }
 
 .tab-title {
@@ -183,7 +162,7 @@ body {
     background-color: var(--dark-color);
     padding: 15px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 2px solid #000;
 }
 
@@ -229,19 +208,100 @@ body {
     text-shadow: 0 0 2px black;
 }
 
+.clicker-container {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    min-height: 0;
+}
 
+.coin {
+    width: 70vmin;
+    height: 70vmin;
+    max-width: 300px;
+    max-height: 300px;
+    min-width: 150px;
+    min-height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD700, #FF8C00);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 4px #000, 0 0 0 8px var(--accent-color), 0 0 0 12px #000;
+    position: relative;
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    touch-action: manipulation;
+    z-index: 10;
+}
 
+.coin:active {
+    transform: scale(0.95);
+}
 
+.coin-inner {
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
 
+.coin-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
 
+.click-effect {
+    position: absolute;
+    font-size: 3vmin;
+    font-weight: bold;
+    color: var(--accent-color);
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    animation: float-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    will-change: transform, opacity;
+}
 
+.critical-effect {
+    position: absolute;
+    font-size: 4vmin;
+    font-weight: bold;
+    color: var(--critical-color);
+    text-shadow: 0 0 10px #fff, 2px 2px 0 #000, 0 0 20px var(--critical-color);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 110;
+    animation: critical-float 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    will-change: transform, opacity;
+}
 
+@keyframes float-up {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -150%) scale(1.5); opacity: 0; }
+}
+
+@keyframes critical-float {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -100%) scale(1.3); opacity: 1; }
+    100% { transform: translate(-50%, -150%) scale(1.5); opacity: 0; }
+}
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    margin-top: 15px;
+    margin-top: 0;
 }
 
 .stat-card {
@@ -280,8 +340,8 @@ body {
     gap: 12px;
     padding-right: 5px;
     overflow-y: auto;
-    max-height: calc(100vh - 250px);
     scrollbar-width: none;
+    flex-grow: 1;
 }
 
 .upgrades-grid::-webkit-scrollbar {
@@ -394,8 +454,8 @@ body {
     gap: 10px;
     padding-right: 5px;
     overflow-y: auto;
-    max-height: calc(100vh - 250px);
     scrollbar-width: none;
+    flex-grow: 1;
 }
 
 .achievements-grid::-webkit-scrollbar {
@@ -458,6 +518,7 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
+    flex-grow: 1;
 }
 
 .stat-item {
@@ -547,7 +608,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(255, 71, 87, 0.8);
-    color: #ffffff;
+    color: white;
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -556,117 +617,32 @@ body {
     border: 2px solid #000;
 }
 
+.level-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-/* Контейнер для кликера */
-.clicker-container {
-    position: relative;
+.progress-bar {
     flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-    margin: 10px 0;
-}
-
-/* Стили для монеты */
-.coin {
-    width: 70vmin;
-    height: 70vmin;
-    max-width: 300px;
-    max-height: 300px;
-    min-width: 150px;
-    min-height: 150px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #dfaa47, #FF8C00);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 0 0 4px #000, 0 0 0 8px var(--accent-color), 0 0 0 12px #000;
-    position: relative;
-    transition: transform 0.1s ease-out;
-    touch-action: manipulation;
-    z-index: 10;
-}
-
-.coin:active {
-    transform: scale(0.95);
-}
-
-.coin-inner {
-    width: 90%;
-    height: 90%;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 10px;
+    background-color: var(--progress-bg);
+    border-radius: 5px;
     overflow: hidden;
 }
 
-.coin-image {
-    width: 100%;
+.progress-fill {
     height: 100%;
-    object-fit: contain;
-    pointer-events: none;
-    image-rendering: pixelated;
+    background-color: var(--progress-fill);
+    width: 0%;
+    transition: width 0.3s ease;
 }
 
-/* Анимации эффектов */
-.click-effect {
-    position: absolute;
-    font-size: 3vmin;
-    font-weight: bold;
-    color: var(--accent-color);
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 100;
-    animation: float-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    will-change: transform, opacity;
-}
-
-.critical-effect {
-    position: absolute;
-    font-size: 4vmin;
-    font-weight: bold;
-    color: var(--critical-color);
-    text-shadow: 0 0 10px #fff, 2px 2px 0 #000, 0 0 20px var(--critical-color);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 110;
-    animation: critical-float 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    will-change: transform, opacity;
-}
-
-@keyframes float-up {
-    0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 1;
+@media (max-width: 480px) {
+    .app-container {
+        padding: 10px;
     }
-    100% {
-        transform: translate(-50%, -150%) scale(1.5);
-        opacity: 0;
-    }
-}
 
-@keyframes critical-float {
-    0% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: translate(-50%, -100%) scale(1.3);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, -150%) scale(1.5);
-        opacity: 0;
-    }
-}
-
-
-
-@media (max-width: 768px) {
     .coin {
         width: 65vmin;
         height: 65vmin;
@@ -713,4 +689,3 @@ body {
 .hidden {
     display: none !important;
 }
-
