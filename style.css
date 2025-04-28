@@ -23,6 +23,8 @@
     box-sizing: border-box;
     font-family: var(--pixel-font);
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -35,34 +37,6 @@ body {
     overflow: hidden;
     touch-action: manipulation;
     font-size: 18px;
-}
-
-.upgrade-card.auto .upgrade-icon {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="4" y="3" width="8" height="10" fill="%2300cec9"/><rect x="5" y="4" width="2" height="2" fill="%23000"/><rect x="9" y="4" width="2" height="2" fill="%23000"/><rect x="6" y="7" width="4" height="3" fill="%23000"/></svg>');
-    background-size: 70%;
-    background-repeat: no-repeat;
-    background-position: center;
-    color: transparent;
-}
-
-* {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-.coin, .coin * {
-    -webkit-tap-highlight-color: transparent;
-    tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
-    outline: none;
-}
-
-.coin.active {
-    transform: scale(0.95);
-    transition: transform 0.1s;
 }
 
 .app-container {
@@ -98,13 +72,13 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     overflow-x: auto;
     padding-bottom: 5px;
-    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
-    white-space: nowrap; /* Запрещаем перенос текста */
-    flex-wrap: nowrap; /* Запрещаем перенос на новую строку */
+    scrollbar-width: none;
+    white-space: nowrap;
+    flex-wrap: nowrap;
 }
 
 .tabs::-webkit-scrollbar {
-    display: none; /* Скрываем скроллбар в Chrome/Safari */
+    display: none;
 }
 
 .tab-button {
@@ -138,32 +112,19 @@ body {
     background-color: var(--accent-color);
 }
 
-/* Основное исправление для скрытия монеты */
-.tab-content:not(#main) .clicker-container {
-    display: none !important;
-}
-
-/* Дополнительные улучшения для мобильной версии */
-@media (max-width: 480px) {
-    .tab-content {
-        position: relative;
-    }
-
-    #main .clicker-container {
-        display: flex !important;
-        /* Другие стили для контейнера монеты */
-    }
-
-    /* Гарантируем, что другие вкладки занимают всё пространство */
-    #upgrades, #achievements, #stats {
-        height: calc(100% - 50px) !important;
-        overflow-y: auto;
-    }
-}
-
-/* Анимация перехода между вкладками */
 .tab-content {
+    flex-grow: 1;
+    overflow: hidden;
+    display: none;
+    padding: 5px;
+    margin-bottom: 10px;
     transition: opacity 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+    opacity: 1;
+    height: auto;
 }
 
 .tab-content:not(.active) {
@@ -172,23 +133,6 @@ body {
     padding: 0;
     margin: 0;
     overflow: hidden;
-}
-
-.tab-content.active {
-    opacity: 1;
-    height: auto;
-}
-
-.tab-content {
-    flex-grow: 1;
-    overflow: hidden;
-    display: none;
-    padding: 5px;
-    margin-bottom: 10px;
-}
-
-.tab-content.active {
-    display: block;
 }
 
 .tab-title {
@@ -291,11 +235,12 @@ body {
     justify-content: center;
     margin: 30px 0;
     flex-grow: 1;
+    min-height: 200px;
 }
 
 .coin {
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     background: linear-gradient(135deg, #FFD700, #FF8C00);
     display: flex;
@@ -304,9 +249,9 @@ body {
     cursor: pointer;
     box-shadow: 0 0 0 4px #000, 0 0 0 8px var(--accent-color), 0 0 0 12px #000;
     position: relative;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    -webkit-touch-callout: none;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .coin:active {
@@ -330,69 +275,53 @@ body {
     image-rendering: pixelated;
 }
 
-/* Увеличенные стили для эффектов */
-
-@media (max-width: 480px) {
-    .click-effect {
-        font-size: 2.5rem; /* Еще больше на мобильных */
-    }
-
-    .critical-effect {
-        font-size: 3.2rem;
-    }
-}
 .click-effect {
-    font-size: 2rem; /* Было 1.2rem */
+    position: absolute;
+    font-size: 1.8rem;
     font-weight: bold;
     color: var(--accent-color);
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.4, 1);
     pointer-events: none;
-    position: absolute;
     z-index: 100;
+    animation: float-up 0.8s forwards;
     will-change: transform, opacity;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-@keyframes float-up {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-60px); opacity: 0; }
 }
 
 .critical-effect {
-    font-size: 2.8rem; /* Было 1.5rem */
+    position: absolute;
+    font-size: 2.2rem;
     font-weight: bold;
     color: var(--critical-color);
-    text-shadow:
-        0 0 10px #fff,
-        2px 2px 0 #000,
-        0 0 20px var(--critical-color);
+    text-shadow: 0 0 10px #fff, 2px 2px 0 #000, 0 0 20px var(--critical-color);
     opacity: 0;
-    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
-    position: absolute;
     z-index: 110;
+    animation: critical-float 1s forwards;
     will-change: transform, opacity;
-    transform: translate(-50%, -50%) scale(1);
+}
+
+@keyframes float-up {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -150%) scale(1.5); opacity: 0; }
 }
 
 @keyframes critical-float {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    50% { transform: translateY(-40px) scale(1.3); opacity: 1; }
-    100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -100%) scale(1.3); opacity: 1; }
+    100% { transform: translate(-50%, -150%) scale(1.5); opacity: 0; }
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 5px;
+    gap: 8px;
     margin-top: 15px;
 }
 
 .stat-card {
     background-color: var(--dark-color);
-    padding: 9px;
+    padding: 10px;
     border-radius: 10px;
     text-align: center;
     border: 2px solid #000;
@@ -405,7 +334,7 @@ body {
 }
 
 .stat-card span {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: var(--light-color);
 }
@@ -423,7 +352,7 @@ body {
 .upgrades-grid {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     padding-right: 5px;
     overflow-y: auto;
     max-height: calc(100vh - 250px);
@@ -437,16 +366,15 @@ body {
 .upgrade-card {
     background-color: var(--dark-color);
     border-radius: 10px;
-    padding: 15px;
+    padding: 12px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 5px;
+    gap: 12px;
     border: 2px solid #000;
 }
 
 .upgrade-icon {
-    font-size: 2rem;
+    font-size: 1.8rem;
     width: 50px;
     height: 50px;
     display: flex;
@@ -455,8 +383,6 @@ body {
     background-color: rgba(108, 92, 231, 0.1);
     border-radius: 50%;
     image-rendering: pixelated;
-    font-smooth: never;
-    -webkit-font-smoothing: none;
 }
 
 .upgrade-card.combo .upgrade-icon {
@@ -506,7 +432,7 @@ body {
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
     font-size: 0.8rem;
     white-space: nowrap;
     border: 2px solid #000;
@@ -554,12 +480,11 @@ body {
 .achievement-card {
     background-color: var(--dark-color);
     border-radius: 10px;
-    padding: 15px;
+    padding: 12px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     opacity: 0.6;
-    margin-bottom: 5px;
     border: 2px solid #000;
 }
 
@@ -612,7 +537,7 @@ body {
 
 .stat-item {
     background-color: var(--dark-color);
-    padding: 15px;
+    padding: 12px;
     border-radius: 10px;
     border: 2px solid #000;
 }
@@ -627,17 +552,6 @@ body {
     font-size: 1.1rem;
     font-weight: bold;
     color: var(--light-color);
-}
-
-.level-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.level-container .progress-bar {
-    flex-grow: 1;
-    height: 6px;
 }
 
 .combo-container {
@@ -691,7 +605,6 @@ body {
     z-index: 100;
     font-size: 0.9rem;
     border: 2px solid #000;
-    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
 }
 
 .notification.show {
@@ -724,54 +637,34 @@ body {
         padding: 10px;
     }
 
-.click-effect, .critical-effect {
-    opacity: 0; /* Начальное состояние - полностью прозрачный */
-    transition: opacity 0.3s, transform 0.8s ease-out;
-    pointer-events: none;
-    position: absolute;
-    z-index: 100;
-}
-
     .coin {
-        width: 85vw;
-        height: 85vw;
-        max-width: 200px;
-        max-height: 200px;
-        margin: 5px 0;
-        flex-shrink: 0;
-        position: relative;
-        overflow: visible;
+        width: 120px;
+        height: 120px;
     }
 
     .clicker-container {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0;
+        margin: 20px 0;
+        min-height: 150px;
+    }
+
+    .click-effect {
+        font-size: 1.5rem;
+    }
+
+    .critical-effect {
+        font-size: 1.8rem;
     }
 
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
-        margin-top: auto;
-        gap: 8px;
+        gap: 6px;
     }
 
     .balance-container, .energy-container {
-        padding: 12px;
-        margin-bottom: 8px;
-    }
-
-    .multiplier-display {
-        margin-top: 8px;
-    }
-
-    body {
-        font-size: 18px;
+        padding: 10px;
+        margin-bottom: 10px;
     }
 }
-
-
 
 @media (min-width: 480px) {
     .app-container {
@@ -791,14 +684,6 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
-@supports (-webkit-touch-callout: none) {
-    .tab-content#main {
-        height: calc(100vh - 160px);
-    }
-}
-
-
 
 .hidden {
     display: none !important;
