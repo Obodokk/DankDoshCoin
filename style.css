@@ -34,6 +34,29 @@ body {
     touch-action: manipulation;
 }
 
+/* Убираем все возможные выделения */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Отключаем выделение при тапании для всех интерактивных элементов */
+.coin, .coin * {
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    outline: none;
+}
+
+/* Специфичные стили для активного состояния на мобильных */
+.coin.active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
 .app-container {
     max-width: 100%;
     height: 100vh;
@@ -107,13 +130,15 @@ body {
     background-color: var(--accent-color);
 }
 
+/* Фиксируем высоту контента вкладок */
 .tab-content {
     flex-grow: 1;
-    overflow-y: auto;
+    overflow: hidden; /* Убираем основной скролл */
+    display: none;
     padding: 5px;
     margin-bottom: 10px;
-    display: none;
 }
+
 
 .tab-content.active {
     display: block;
@@ -261,6 +286,8 @@ body {
         0 0 0 12px #000;
     position: relative;
     transition: transform 0.1s;
+    -webkit-touch-callout: none; /* Отключаем меню при долгом нажатии */
+    touch-action: manipulation; /* Оптимизация для касаний */
 }
 
 .coin:active {
@@ -375,12 +402,21 @@ body {
     color: var(--light-color);
 }
 
-/* Upgrades Tab Styles */
+/* Стили для вкладки улучшений */
 .upgrades-grid {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding-right: 5px;
+    overflow-y: auto;
+    max-height: calc(100vh - 250px);
+    scrollbar-width: none;
 }
+
+.upgrades-grid::-webkit-scrollbar {
+    display: none;
+}
+
 
 .upgrade-card {
     background-color: var(--dark-color);
@@ -389,6 +425,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-bottom: 5px;
 }
 
 .upgrade-icon {
@@ -482,12 +519,26 @@ body {
 }
 
 /* Achievements Tab Styles */
+
+
+/* Исправления для вкладки достижений */
 .achievements-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
+    padding-right: 5px; /* Добавляем небольшой отступ */
+    overflow-y: auto; /* Разрешаем скролл только при необходимости */
+    max-height: calc(100vh - 250px); /* Фиксируем максимальную высоту */
+    scrollbar-width: none; /* Скрываем полосу прокрутки в Firefox */
 }
 
+/* Скрываем полосу прокрутки в WebKit браузерах */
+.achievements-grid::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Улучшаем отображение карточек достижений */
 .achievement-card {
     background-color: var(--dark-color);
     border-radius: 10px;
@@ -496,6 +547,7 @@ body {
     align-items: center;
     gap: 15px;
     opacity: 0.6;
+    margin-bottom: 5px; /* Добавляем отступ между карточками */
 }
 
 .achievement-card.unlocked {
@@ -659,6 +711,9 @@ body {
     .app-container {
         max-width: 480px;
         margin: 0 auto;
+    }
+    .coin:hover, .coin:active {
+        background-color: initial;
     }
 
     .coin {
