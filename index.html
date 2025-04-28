@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DankDoshCoin</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="main">Главная</button>
+            <button class="tab-button" data-tab="upgrades">Улучшения</button>
+            <button class="tab-button" data-tab="achievements">Достижения</button>
+            <button class="tab-button" data-tab="stats">Статистика</button>
+        </div>
+
+        <div class="tab-content active" id="main">
+            <div class="balance-container">
+                <h2>Ваш баланс DankDoshCoin</h2>
+                <div class="balance-amount">
+                    <span id="balance">0</span>
+                    <span class="currency">DDC</span>
+                </div>
+            </div>
+
+            <div class="energy-container">
+                <div class="energy-header">
+                    <h3>Энергия</h3>
+                    <span id="energy-text">100/100</span>
+                </div>
+                <div class="energy-bar">
+                    <div class="energy-fill" id="energy-fill"></div>
+                    <span class="energy-value" id="energy-value">100%</span>
+                </div>
+            </div>
+
+            <div class="clicker-container">
+                <div class="coin" id="coin" ontouchstart="">
+                    <div class="coin-inner no-select">
+                        <img src="https://github.com/Obodokk/DankDoshCoin/blob/main/DankDoshCoin.png?raw=true"
+                            alt="DankDoshCoin"
+                            class="coin-image">
+                    </div>
+                </div>
+                <div class="click-effect" id="click-effect">+1</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Сила клика</h3>
+                    <span id="click-power">1</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Всего заработано</h3>
+                    <span id="total-earned">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Автокликер</h3>
+                    <span id="auto-clicker">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Уровень</h3>
+                    <span id="player-level">1</span>
+                </div>
+            </div>
+
+            <div class="multiplier-display">
+                <span>Текущий множитель: x<span id="current-multiplier">1.00</span></span>
+            </div>
+        </div>
+
+        <div class="tab-content" id="upgrades">
+            <h2 class="tab-title">Улучшения</h2>
+            <div class="upgrades-grid">
+                <div class="upgrade-card">
+                    <div class="upgrade-icon">✊</div>
+                    <div class="upgrade-info">
+                        <h3>Сила клика</h3>
+                        <p>Увеличивает количество DDC за каждый клик</p>
+                        <div class="upgrade-stats">
+                            <span>Текущий уровень: <span id="click-power-level">1</span></span>
+                            <span>+<span id="click-power-value">1</span> DDC/клик</span>
+                        </div>
+                    </div>
+                    <button class="upgrade-btn" id="upgrade-click">
+                        <span class="price" id="click-upgrade-cost">100</span> DDC
+                    </button>
+                </div>
+
+                <div class="upgrade-card">
+                    <div class="upgrade-icon">👾</div>
+                    <div class="upgrade-info">
+                        <h3>Автокликер</h3>
+                        <p>Автоматически зарабатывает DDC каждые 12 часов</p>
+                        <div class="upgrade-stats">
+                            <span>Текущий уровень: <span id="auto-clicker-level">0</span></span>
+                            <span>+<span id="auto-clicker-value">0</span> DDC/12ч</span>
+                        </div>
+                    </div>
+                    <button class="upgrade-btn" id="upgrade-auto">
+                        <span class="price" id="auto-upgrade-cost">1000</span> DDC
+                    </button>
+                </div>
+
+                <div class="upgrade-card">
+                    <div class="upgrade-icon">⚡</div>
+                    <div class="upgrade-info">
+                        <h3>Энергия</h3>
+                        <p>Увеличивает максимальный запас энергии</p>
+                        <div class="upgrade-stats">
+                            <span>Текущий уровень: <span id="energy-level">1</span></span>
+                            <span>Макс. энергия: <span id="energy-max-value">100</span></span>
+                        </div>
+                    </div>
+                    <button class="upgrade-btn" id="upgrade-energy">
+                        <span class="price" id="energy-upgrade-cost">500</span> DDC
+                    </button>
+                </div>
+
+                <div class="upgrade-card combo">
+                    <div class="upgrade-icon">🎯</div>
+                    <div class="upgrade-info">
+                        <h3>Система комбо</h3>
+                        <p>Увеличивает время и множитель комбо</p>
+                        <div class="upgrade-stats">
+                            <span>Текущий уровень: <span id="combo-time-level">1</span></span>
+                            <span>Время комбо: <span id="combo-time-value">2</span>с</span>
+                            <span>Макс. множитель: x<span id="combo-multiplier-value">1.5</span></span>
+                        </div>
+                    </div>
+                    <button class="upgrade-btn" id="upgrade-combo">
+                        <span class="price" id="combo-upgrade-cost">750</span> DDC
+                    </button>
+                </div>
+
+                <div class="upgrade-card critical">
+                    <div class="upgrade-icon">💢</div>
+                    <div class="upgrade-info">
+                        <h3>Критические клики</h3>
+                        <p>Увеличивает шанс и силу критических кликов</p>
+                        <div class="upgrade-stats">
+                            <span>Текущий уровень: <span id="critical-level">1</span></span>
+                            <span>Шанс: <span id="critical-chance">5</span>%</span>
+                            <span>Множитель: x<span id="critical-multiplier">2</span></span>
+                        </div>
+                    </div>
+                    <button class="upgrade-btn" id="upgrade-critical">
+                        <span class="price" id="critical-upgrade-cost">1200</span> DDC
+                    </button>
+                </div>
+
+                <div class="upgrade-card booster">
+                    <div class="upgrade-icon">🚀</div>
+                    <div class="upgrade-info">
+                        <h3>Буст доходности</h3>
+                        <p>Временное увеличение дохода от кликов</p>
+                        <div class="upgrade-stats">
+                            <span>Текущий уровень: <span id="boost-level">0</span></span>
+                            <span>Множитель: x<span id="boost-value">1.5</span></span>
+                            <span>Длительность: <span id="boost-duration">1</span>ч</span>
+                        </div>
+                    </div>
+                    <button class="upgrade-btn" id="upgrade-boost">
+                        <span class="price" id="boost-upgrade-cost">2000</span> DDC
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="achievements">
+            <h2 class="tab-title">Достижения</h2>
+            <div class="achievements-grid" id="achievements-container">
+                <!-- Achievements will be added dynamically -->
+            </div>
+        </div>
+
+        <div class="tab-content" id="stats">
+            <h2 class="tab-title">Статистика</h2>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <h3>Всего кликов</h3>
+                    <span id="stats-total-clicks">0</span>
+                </div>
+                <div class="stat-item">
+                    <h3>Всего заработано</h3>
+                    <span id="stats-total-earned">0</span> DDC
+                </div>
+                <div class="stat-item">
+                    <h3>Заработано автокликером</h3>
+                    <span id="stats-auto-earned">0</span> DDC
+                </div>
+                <div class="stat-item">
+                    <h3>Потрачено на улучшения</h3>
+                    <span id="stats-spent">0</span> DDC
+                </div>
+                <div class="stat-item">
+                    <h3>Время игры</h3>
+                    <span id="stats-play-time">0:00:00</span>
+                </div>
+                <div class="stat-item">
+                    <h3>Критические клики</h3>
+                    <span id="stats-criticals">0</span> (x<span id="stats-highest-critical">1</span>)
+                </div>
+                <div class="stat-item">
+                    <h3>Максимальное комбо</h3>
+                    <span id="stats-max-combo">0</span> (x<span id="stats-combo-multiplier">1</span>)
+                </div>
+                <div class="stat-item">
+                    <h3>Бустов использовано</h3>
+                    <span id="stats-boosts-used">0</span>
+                </div>
+                <div class="stat-item">
+                    <h3>Уровень</h3>
+                    <div class="level-container">
+                        <span id="stats-level">1</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="stats-level-progress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="notification" id="notification"></div>
+        <div class="combo-container" id="combo-display"></div>
+        <div class="boost-indicator" id="boost-indicator">Буст активен!</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
