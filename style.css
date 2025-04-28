@@ -330,14 +330,29 @@ body {
     image-rendering: pixelated;
 }
 
+/* Увеличенные стили для эффектов */
+
+@media (max-width: 480px) {
+    .click-effect {
+        font-size: 2.5rem; /* Еще больше на мобильных */
+    }
+    
+    .critical-effect {
+        font-size: 3.2rem;
+    }
+}
 .click-effect {
-    position: absolute;
-    font-size: 1.2rem;
+    font-size: 2rem; /* Было 1.2rem */
     font-weight: bold;
     color: var(--accent-color);
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
     opacity: 0;
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.4, 1);
     pointer-events: none;
-    z-index: 10;
+    position: absolute;
+    z-index: 100;
+    will-change: transform, opacity;
+    transform: translate(-50%, -50%) scale(1);
 }
 
 @keyframes float-up {
@@ -346,14 +361,20 @@ body {
 }
 
 .critical-effect {
-    position: absolute;
-    font-size: 1.5rem;
+    font-size: 2.8rem; /* Было 1.5rem */
     font-weight: bold;
     color: var(--critical-color);
+    text-shadow:
+        0 0 10px #fff,
+        2px 2px 0 #000,
+        0 0 20px var(--critical-color);
     opacity: 0;
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
-    z-index: 50;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    position: absolute;
+    z-index: 110;
+    will-change: transform, opacity;
+    transform: translate(-50%, -50%) scale(1);
 }
 
 @keyframes critical-float {
@@ -703,7 +724,13 @@ body {
         padding: 10px;
     }
 
-
+.click-effect, .critical-effect {
+    opacity: 0; /* Начальное состояние - полностью прозрачный */
+    transition: opacity 0.3s, transform 0.8s ease-out;
+    pointer-events: none;
+    position: absolute;
+    z-index: 100;
+}
 
     .coin {
         width: 85vw;
@@ -712,6 +739,8 @@ body {
         max-height: 200px;
         margin: 5px 0;
         flex-shrink: 0;
+        position: relative;
+        overflow: visible;
     }
 
     .clicker-container {
