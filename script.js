@@ -150,7 +150,7 @@ function initGame() {
     setupEventListeners();
     // Обработчики для мобильных устройств
     const coin = document.getElementById('coin');
-    
+
     // Отключаем стандартное поведение
     coin.addEventListener('touchstart', function(e) {
         e.preventDefault();
@@ -170,14 +170,7 @@ function initGame() {
         }
     }, {passive: false});
 
-    // Инициализация изображения монеты
-elements.coin.innerHTML = `
-    <div class="no-select">
-        <img src="https://github.com/Obodokk/DankDoshCoin/blob/main/DankDoshCoin.png?raw=true" 
-             alt="DankDoshCoin" 
-             class="coin-image">
-    </div>
-`;
+
 
 document.addEventListener('selectstart', function(e) {
     if (e.target === elements.coin || e.target.closest('.coin')) {
@@ -620,6 +613,14 @@ function getUpgradeName(type) {
     };
     return names[type] || type;
 }
+    // Инициализация изображения монеты
+elements.coin.innerHTML = `
+    <div class="no-select">
+        <img src="https://github.com/Obodokk/DankDoshCoin/blob/main/DankDoshCoin.png?raw=true" 
+             alt="DankDoshCoin" 
+             class="coin-image">
+    </div>
+`;
 
 // Инициализация игры
 document.addEventListener('DOMContentLoaded', initGame);
