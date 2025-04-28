@@ -1,716 +1,630 @@
-:root {
-    --primary-color: #6c5ce7;
-    --secondary-color: #ffbd94;
-    --accent-color: #e8874c;
-    --dark-color: #2d3436;
-    --darker-color: #1e272e;
-    --light-color: #e87a38;
-    --energy-full: #00b894;
-    --energy-low: #fdcb6e;
-    --energy-empty: #d63031;
-    --progress-bg: #3d3d3d;
-    --progress-fill: var(--accent-color);
-    --critical-color: #ff7675;
-    --combo-color: #a55eea;
-    --boost-color: #ff4757;
-    --pixel-font: 'VT323', monospace;
-    --pixel-font-alt: 'Press Start 2P', cursive;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: var(--pixel-font);
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-body {
-    background-color: var(--darker-color);
-    color: var(--light-color);
-    height: 100vh;
-    overflow: hidden;
-    touch-action: manipulation;
-    font-size: 18px;
-}
-
-.app-container {
-    max-width: 100%;
-    height: 100vh;
-    margin: 0 auto;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    border: 4px solid #000;
-    image-rendering: pixelated;
-}
-
-.app-header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.app-header h1 {
-    color: var(--accent-color);
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-    font-family: var(--pixel-font-alt);
-    letter-spacing: 1px;
-}
-
-.tabs {
-    display: flex;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    overflow-x: auto;
-    padding-bottom: 5px;
-    scrollbar-width: none;
-    white-space: nowrap;
-    flex-wrap: nowrap;
-}
-
-.tabs::-webkit-scrollbar {
-    display: none;
-}
-
-.tab-button {
-    flex: 1;
-    min-width: 80px;
-    padding: 10px 5px;
-    background: none;
-    border: none;
-    color: var(--light-color);
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    border: 2px solid #000;
-    text-transform: uppercase;
-}
-
-.tab-button.active {
-    color: var(--accent-color);
-}
-
-.tab-button.active::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: var(--accent-color);
-}
-
-.tab-content {
-    flex-grow: 1;
-    overflow: hidden;
-    display: none;
-    padding: 5px;
-    margin-bottom: 10px;
-    transition: opacity 0.3s ease;
-}
-
-.tab-content.active {
-    display: block;
-    opacity: 1;
-    height: auto;
-}
-
-.tab-content:not(.active) {
-    opacity: 0;
-    height: 0;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-}
-
-.tab-title {
-    color: var(--accent-color);
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-    text-align: center;
-    font-family: var(--pixel-font-alt);
-}
-
-.balance-container {
-    background-color: var(--dark-color);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    text-align: center;
-    border: 2px solid #000;
-}
-
-.balance-container h2 {
-    font-size: 1rem;
-    color: var(--secondary-color);
-    margin-bottom: 5px;
-}
-
-.balance-amount {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    margin-bottom: 10px;
-}
-
-.balance-amount span:first-child {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--light-color);
-}
-
-.currency {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    align-self: flex-end;
-    margin-bottom: 5px;
-}
-
-.energy-container {
-    background-color: var(--dark-color);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 2px solid #000;
-}
-
-.energy-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.energy-header h3 {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-}
-
-.energy-header span {
-    color: var(--light-color);
-    font-weight: bold;
-}
-
-.energy-bar {
-    width: 100%;
-    height: 10px;
-    background-color: var(--progress-bg);
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-}
-
-.energy-fill {
-    height: 100%;
-    background: linear-gradient(to right, var(--energy-full), var(--accent-color));
-    width: 100%;
-    transition: width 0.5s ease-out;
-}
-
-.energy-value {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.7rem;
-    color: white;
-    text-shadow: 0 0 2px black;
-}
-
-
-
-
-
-
-
-
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    margin-top: 15px;
-}
-
-.stat-card {
-    background-color: var(--dark-color);
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    border: 2px solid #000;
-}
-
-.stat-card h3 {
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    margin-bottom: 5px;
-}
-
-.stat-card span {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--light-color);
-}
-
-.multiplier-display {
-    background-color: var(--dark-color);
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    border: 2px solid #000;
-}
-
-.upgrades-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-right: 5px;
-    overflow-y: auto;
-    max-height: calc(100vh - 250px);
-    scrollbar-width: none;
-}
-
-.upgrades-grid::-webkit-scrollbar {
-    display: none;
-}
-
-.upgrade-card {
-    background-color: var(--dark-color);
-    border-radius: 10px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border: 2px solid #000;
-}
-
-.upgrade-icon {
-    font-size: 1.8rem;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(108, 92, 231, 0.1);
-    border-radius: 50%;
-    image-rendering: pixelated;
-}
-
-.upgrade-card.combo .upgrade-icon {
-    background-color: rgba(165, 94, 234, 0.1);
-    color: var(--combo-color);
-}
-
-.upgrade-card.critical .upgrade-icon {
-    background-color: rgba(255, 118, 117, 0.1);
-    color: var(--critical-color);
-}
-
-.upgrade-card.booster .upgrade-icon {
-    background-color: rgba(255, 71, 87, 0.1);
-    color: var(--boost-color);
-}
-
-.upgrade-info {
-    flex-grow: 1;
-}
-
-.upgrade-info h3 {
-    color: var(--light-color);
-    margin-bottom: 5px;
-    font-size: 1rem;
-}
-
-.upgrade-info p {
-    color: var(--secondary-color);
-    font-size: 0.8rem;
-    margin-bottom: 8px;
-}
-
-.upgrade-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    font-size: 0.8rem;
-    color: var(--secondary-color);
-}
-
-.upgrade-btn {
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s ease;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    border: 2px solid #000;
-    box-shadow: 3px 3px 0 #000;
-    text-transform: uppercase;
-}
-
-.upgrade-card.combo .upgrade-btn {
-    background: linear-gradient(to right, var(--combo-color), #8e44ad);
-}
-
-.upgrade-card.critical .upgrade-btn {
-    background: linear-gradient(to right, var(--critical-color), #e84393);
-}
-
-.upgrade-card.booster .upgrade-btn {
-    background: linear-gradient(to right, var(--boost-color), #e84118);
-}
-
-.upgrade-btn:disabled {
-    background: var(--progress-bg);
-    color: #666;
-    cursor: not-allowed;
-}
-
-.upgrade-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.achievements-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding-right: 5px;
-    overflow-y: auto;
-    max-height: calc(100vh - 250px);
-    scrollbar-width: none;
-}
-
-.achievements-grid::-webkit-scrollbar {
-    display: none;
-}
-
-.achievement-card {
-    background-color: var(--dark-color);
-    border-radius: 10px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    opacity: 0.6;
-    border: 2px solid #000;
-}
-
-.achievement-card.unlocked {
-    opacity: 1;
-    border-left: 4px solid var(--accent-color);
-}
-
-.achievement-icon {
-    font-size: 1.8rem;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-}
-
-.achievement-card.unlocked .achievement-icon {
-    background-color: rgba(0, 206, 201, 0.2);
-}
-
-.achievement-info {
-    flex-grow: 1;
-}
-
-.achievement-info h3 {
-    color: var(--light-color);
-    margin-bottom: 3px;
-    font-size: 1rem;
-}
-
-.achievement-info p {
-    color: var(--secondary-color);
-    font-size: 0.8rem;
-}
-
-.achievement-reward {
-    font-weight: bold;
-    color: var(--accent-color);
-    font-size: 0.9rem;
-}
-
-.stats-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-}
-
-.stat-item {
-    background-color: var(--dark-color);
-    padding: 12px;
-    border-radius: 10px;
-    border: 2px solid #000;
-}
-
-.stat-item h3 {
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    margin-bottom: 5px;
-}
-
-.stat-item span {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--light-color);
-}
-
-.combo-container {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 5px 15px;
-    border-radius: 20px;
-    color: white;
-    font-weight: bold;
-    opacity: 0;
-    transition: opacity 0.3s;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border: 2px solid #000;
-}
-
-.combo-container.active {
-    opacity: 1;
-}
-
-.combo-count {
-    color: var(--combo-color);
-    font-size: 1.1rem;
-}
-
-.combo-multiplier {
-    background-color: var(--combo-color);
-    color: white;
-    padding: 0 5px;
-    border-radius: 3px;
-    font-size: 0.8rem;
-}
-
-.notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: opacity 0.3s;
-    z-index: 100;
-    font-size: 0.9rem;
-    border: 2px solid #000;
-}
-
-.notification.show {
-    opacity: 1;
-    animation: fade-out 2s forwards 1s;
-}
-
-@keyframes fade-out {
-    to { opacity: 0; }
-}
-
-.boost-indicator {
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(255, 71, 87, 0.8);
-    color: #ffffff;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    z-index: 100;
-    display: none;
-    border: 2px solid #000;
-}
-
-
-/* Контейнер для кликера */
-.clicker-container {
-    position: relative;
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-    margin: 10px 0;
-}
-
-/* Стили для монеты */
-.coin {
-    width: 70vmin;
-    height: 70vmin;
-    max-width: 300px;
-    max-height: 300px;
-    min-width: 150px;
-    min-height: 150px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #dfaa47, #FF8C00);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 0 0 4px #000, 0 0 0 8px var(--accent-color), 0 0 0 12px #000;
-    position: relative;
-    transition: transform 0.1s ease-out;
-    touch-action: manipulation;
-    z-index: 10;
-}
-
-.coin:active {
-    transform: scale(0.95);
-}
-
-.coin-inner {
-    width: 90%;
-    height: 90%;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.coin-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    pointer-events: none;
-    image-rendering: pixelated;
-}
-
-/* Анимации эффектов */
-.click-effect {
-    position: absolute;
-    font-size: 3vmin;
-    font-weight: bold;
-    color: var(--accent-color);
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 100;
-    animation: float-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    will-change: transform, opacity;
-}
-
-.critical-effect {
-    position: absolute;
-    font-size: 4vmin;
-    font-weight: bold;
-    color: var(--critical-color);
-    text-shadow: 0 0 10px #fff, 2px 2px 0 #000, 0 0 20px var(--critical-color);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 110;
-    animation: critical-float 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    will-change: transform, opacity;
-}
-
-@keyframes float-up {
-    0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, -150%) scale(1.5);
-        opacity: 0;
-    }
-}
-
-@keyframes critical-float {
-    0% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: translate(-50%, -100%) scale(1.3);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, -150%) scale(1.5);
-        opacity: 0;
+// Game State
+const gameState = {
+    balance: 0,
+    clickPower: 1,
+    energy: 100,
+    maxEnergy: 100,
+    totalClicks: 0,
+    totalEarned: 0,
+    autoEarned: 0,
+    spentOnUpgrades: 0,
+    playTime: 0,
+    level: 1,
+    xp: 0,
+    combo: 0,
+    highestCombo: 0,
+    lastClickTime: 0,
+    comboTimeout: null,
+    totalCriticals: 0,
+    highestCritical: 1,
+    criticalChance: 0.05,
+    criticalMultiplier: 2,
+    boostsUsed: 0,
+    boostEndTime: 0,
+    fastClicks: 0,
+    fullEnergyStreak: 0,
+    highestMultiplier: 1,
+    multipliers: {
+        combo: 1,
+        boost: 1,
+        total: 1
+    },
+    upgrades: {
+        clickPower: 1,
+        autoClicker: 0,
+        energy: 1,
+        comboTime: 1,
+        criticalChance: 1,
+        criticalPower: 1,
+        boost: 0
+    },
+    achievements: [],
+    startTime: Date.now(),
+    lastPlayDate: new Date().toDateString(),
+    consecutiveDays: 1
+};
+
+// DOM Elements
+const elements = {
+    balance: document.getElementById('balance'),
+    coin: document.getElementById('coin'),
+    clickPower: document.getElementById('click-power'),
+    totalEarned: document.getElementById('total-earned'),
+    autoClicker: document.getElementById('auto-clicker'),
+    playerLevel: document.getElementById('player-level'),
+    energyText: document.getElementById('energy-text'),
+    energyFill: document.getElementById('energy-fill'),
+    energyValue: document.getElementById('energy-value'),
+    currentMultiplier: document.getElementById('current-multiplier'),
+    notification: document.getElementById('notification'),
+    comboDisplay: document.getElementById('combo-display'),
+    tabButtons: document.querySelectorAll('.tab-button'),
+    tabContents: document.querySelectorAll('.tab-content'),
+    upgradeClickBtn: document.getElementById('upgrade-click'),
+    upgradeAutoBtn: document.getElementById('upgrade-auto'),
+    upgradeEnergyBtn: document.getElementById('upgrade-energy'),
+    upgradeComboBtn: document.getElementById('upgrade-combo'),
+    upgradeCriticalBtn: document.getElementById('upgrade-critical'),
+    upgradeBoostBtn: document.getElementById('upgrade-boost'),
+    clickUpgradeCost: document.getElementById('click-upgrade-cost'),
+    autoUpgradeCost: document.getElementById('auto-upgrade-cost'),
+    energyUpgradeCost: document.getElementById('energy-upgrade-cost'),
+    comboUpgradeCost: document.getElementById('combo-upgrade-cost'),
+    criticalUpgradeCost: document.getElementById('critical-upgrade-cost'),
+    boostUpgradeCost: document.getElementById('boost-upgrade-cost'),
+    clickPowerLevel: document.getElementById('click-power-level'),
+    clickPowerValue: document.getElementById('click-power-value'),
+    autoClickerLevel: document.getElementById('auto-clicker-level'),
+    autoClickerValue: document.getElementById('auto-clicker-value'),
+    energyLevel: document.getElementById('energy-level'),
+    energyMaxValue: document.getElementById('energy-max-value'),
+    comboTimeLevel: document.getElementById('combo-time-level'),
+    comboTimeValue: document.getElementById('combo-time-value'),
+    comboMultiplierValue: document.getElementById('combo-multiplier-value'),
+    criticalLevel: document.getElementById('critical-level'),
+    criticalChance: document.getElementById('critical-chance'),
+    criticalMultiplier: document.getElementById('critical-multiplier'),
+    boostLevel: document.getElementById('boost-level'),
+    boostValue: document.getElementById('boost-value'),
+    boostDuration: document.getElementById('boost-duration'),
+    statsTotalClicks: document.getElementById('stats-total-clicks'),
+    statsTotalEarned: document.getElementById('stats-total-earned'),
+    statsAutoEarned: document.getElementById('stats-auto-earned'),
+    statsSpent: document.getElementById('stats-spent'),
+    statsPlayTime: document.getElementById('stats-play-time'),
+    statsCriticals: document.getElementById('stats-criticals'),
+    statsHighestCritical: document.getElementById('stats-highest-critical'),
+    statsMaxCombo: document.getElementById('stats-max-combo'),
+    statsComboMultiplier: document.getElementById('stats-combo-multiplier'),
+    statsBoostsUsed: document.getElementById('stats-boosts-used'),
+    statsLevel: document.getElementById('stats-level'),
+    statsLevelProgress: document.getElementById('stats-level-progress'),
+    achievementsContainer: document.getElementById('achievements-container'),
+    boostIndicator: document.getElementById('boost-indicator')
+};
+
+// Constants
+const UPGRADE_COSTS = {
+    clickPower: (level) => Math.floor(100 * Math.pow(1.5, level - 1)),
+    autoClicker: (level) => Math.floor(1000 * Math.pow(2, level)),
+    energy: (level) => Math.floor(500 * Math.pow(1.8, level - 1)),
+    comboTime: (level) => Math.floor(750 * Math.pow(1.6, level - 1)),
+    criticalChance: (level) => Math.floor(1200 * Math.pow(1.7, level - 1)),
+    criticalPower: (level) => Math.floor(1200 * Math.pow(1.7, level - 1)),
+    boost: (level) => Math.floor(2000 * Math.pow(1.8, level))
+};
+
+const XP_NEEDED = (level) => Math.floor(1000 * Math.pow(1.2, level - 1));
+
+// Achievements
+const ACHIEVEMENTS = [
+    { id: 'first_coin', name: 'Первая монета', description: 'Заработайте свою первую монету', condition: (s) => s.totalEarned >= 1, reward: 10, icon: '💰' },
+    { id: 'novice', name: 'Новичок', description: 'Заработайте 1000 DDC', condition: (s) => s.totalEarned >= 1000, reward: 100, icon: '👶' },
+    { id: 'click_master', name: 'Мастер клика', description: 'Совершите 100 кликов', condition: (s) => s.totalClicks >= 100, reward: 50, icon: '👆' },
+    { id: 'auto_farmer', name: 'Автофермер', description: 'Купите первый уровень автокликера', condition: (s) => s.upgrades.autoClicker >= 1, reward: 200, icon: '🤖' },
+    { id: 'upgrader', name: 'Улучшатель', description: 'Купите 5 улучшений', condition: (s) => (s.upgrades.clickPower + s.upgrades.autoClicker + s.upgrades.energy) >= 5, reward: 250, icon: '🔧' },
+    { id: 'energy_keeper', name: 'Энерджайзер', description: 'Увеличьте максимальную энергию до 200', condition: (s) => s.maxEnergy >= 200, reward: 300, icon: '⚡' },
+    { id: 'rich', name: 'Богач', description: 'Накопите 10,000 DDC', condition: (s) => s.balance >= 10000, reward: 1000, icon: '🤑' },
+    { id: 'pro_player', name: 'Профессионал', description: 'Достигните 10 уровня', condition: (s) => s.level >= 10, reward: 1500, icon: '🏆' },
+    { id: 'time_spender', name: 'Ветеран', description: 'Играйте более 1 часа', condition: (s) => s.playTime >= 3600, reward: 500, icon: '⏳' },
+    { id: 'all_max', name: 'Легенда DankDosh', description: 'Максимально улучшите все показатели', condition: (s) => s.upgrades.clickPower >= 20 && s.upgrades.autoClicker >= 10 && s.upgrades.energy >= 10, reward: 5000, icon: '🌟' }
+];
+
+// Core Functions
+function initGame() {
+    loadGameState();
+    checkConsecutiveDays();
+    setupEventListeners();
+    startGameLoops();
+    updateUI();
+    renderAchievements();
+
+    // Initial setup for mobile
+    setupMobileEvents();
+}
+
+function setupMobileEvents() {
+    // Универсальный обработчик для всех типов кликов
+    elements.coin.addEventListener('pointerdown', handlePointerDown);
+    elements.coin.addEventListener('pointerup', handlePointerUp);
+    elements.coin.addEventListener('touchstart', handleTouch, { passive: false });
+    elements.coin.addEventListener('touchend', handleTouch, { passive: false });
+
+    // Предотвращаем масштабирование при двойном тапе
+    elements.coin.addEventListener('gesturestart', (e) => {
+        e.preventDefault();
+    });
+}
+
+function handlePointerDown(e) {
+    e.preventDefault();
+    elements.coin.classList.add('active');
+}
+
+function handleTouch(e) {
+    e.preventDefault();
+    if (e.type === 'touchstart') {
+        elements.coin.classList.add('active');
+    } else if (e.type === 'touchend') {
+        elements.coin.classList.remove('active');
+        handleCoinClick(e.touches[0] || e.changedTouches[0]);
     }
 }
 
 
 
-@media (max-width: 768px) {
-    .coin {
-        width: 65vmin;
-        height: 65vmin;
-    }
+function handleTouchStart(e) {
+    e.preventDefault();
+    elements.coin.classList.add('active');
+}
 
-    .click-effect {
-        font-size: 4vmin;
-    }
+function handleTouchEnd(e) {
+    e.preventDefault();
+    elements.coin.classList.remove('active');
+    handleCoinClick(e);
+}
 
-    .critical-effect {
-        font-size: 5vmin;
-    }
-
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-    }
-
-    .balance-container, .energy-container {
-        padding: 10px;
-        margin-bottom: 10px;
+function preventTouchMove(e) {
+    if (e.target === elements.coin || e.target.closest('.coin')) {
+        e.preventDefault();
     }
 }
 
-@media (min-width: 480px) {
-    .app-container {
-        max-width: 480px;
-        margin: 0 auto;
-    }
+function startGameLoops() {
+    setInterval(gameLoop, 1000);
+    setInterval(autoClickerLoop, 1000 * 60 * 60 * 12);
+}
 
-    .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+function gameLoop() {
+    updatePlayTime();
+    regenerateEnergy();
+    checkBoostStatus();
+    checkAchievements();
+    updateUI();
+    saveGameState();
+}
 
-    .achievements-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+function updatePlayTime() {
+    gameState.playTime = Math.floor((Date.now() - gameState.startTime) / 1000);
+}
 
-    .stats-container {
-        grid-template-columns: repeat(2, 1fr);
+function regenerateEnergy() {
+    if (gameState.energy < gameState.maxEnergy) {
+        gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + 0.2);
+        gameState.fullEnergyStreak = (gameState.energy === gameState.maxEnergy) ?
+            gameState.fullEnergyStreak + 1 : 0;
     }
 }
 
-.hidden {
-    display: none !important;
+function checkBoostStatus() {
+    if (gameState.upgrades.boost > 0 && Date.now() > gameState.boostEndTime) {
+        gameState.upgrades.boost = 0;
+        elements.boostIndicator.style.display = 'none';
+    }
 }
 
+function autoClickerLoop() {
+    if (gameState.upgrades.autoClicker > 0) {
+        const earned = 500 * gameState.upgrades.autoClicker;
+        gameState.balance += earned;
+        gameState.totalEarned += earned;
+        gameState.autoEarned += earned;
+        addXP(earned * 0.5);
+        showNotification(`Автокликер заработал ${earned} DDC!`);
+        updateUI();
+    }
+}
+
+// Event Handlers
+function setupEventListeners() {
+    elements.coin.addEventListener('click', handleCoinClick);
+
+    elements.upgradeClickBtn.addEventListener('click', () => upgrade('clickPower'));
+    elements.upgradeAutoBtn.addEventListener('click', () => upgrade('autoClicker'));
+    elements.upgradeEnergyBtn.addEventListener('click', () => upgrade('energy'));
+    elements.upgradeComboBtn.addEventListener('click', () => upgrade('comboTime'));
+    elements.upgradeCriticalBtn.addEventListener('click', () => upgrade('criticalChance'));
+    elements.upgradeBoostBtn.addEventListener('click', activateBoost);
+
+    elements.tabButtons.forEach(button => {
+        button.addEventListener('click', () => switchTab(button.dataset.tab));
+    });
+}
+
+function handleCoinClick(e) {
+    // Получаем координаты клика
+    let clientX, clientY;
+
+    if (e.touches && e.touches.length > 0) {
+        // Для touch-событий
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+        // Для touchend
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+    } else {
+        // Для обычных кликов
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+
+    const clickPosition = getClickPosition(e);
+    const now = Date.now();
+    updateComboSystem(now);
+
+    const isCritical = checkCriticalHit();
+    let earned = calculateEarnings(isCritical);
+
+    if (isCritical) {
+        createClickEffect(clickPosition.x, clickPosition.y, `CRIT! x${gameState.criticalMultiplier.toFixed(1)}`, true);
+    }
+
+    createClickEffect(clickPosition.x, clickPosition.y, `+${earned}`, false);
+    updateGameState(earned);
+    animateCoin();
+    updateUI();
+    saveGameState();
+}
+
+function getClickPosition(e) {
+    const rect = elements.coin.getBoundingClientRect();
+    return {
+        x: (e.clientX || e.touches[0].clientX) - rect.left,
+        y: (e.clientY || e.touches[0].clientY) - rect.top
+    };
+}
+
+function updateComboSystem(now) {
+    const comboTime = 2 - (gameState.upgrades.comboTime - 1) * 0.1;
+    const timeDiff = now - gameState.lastClickTime;
+
+    if (timeDiff < 1000 * comboTime) {
+        gameState.combo++;
+        clearTimeout(gameState.comboTimeout);
+        gameState.comboTimeout = setTimeout(() => {
+            gameState.combo = 0;
+            calculateMultipliers();
+            updateComboUI();
+        }, 1000 * comboTime);
+    } else {
+        gameState.combo = 1;
+    }
+
+    gameState.lastClickTime = now;
+    gameState.highestCombo = Math.max(gameState.highestCombo, gameState.combo);
+    gameState.fastClicks = (timeDiff < 500) ? gameState.fastClicks + 1 : 0;
+}
+
+function checkCriticalHit() {
+    const isCritical = Math.random() < (0.05 * gameState.upgrades.criticalChance);
+    if (isCritical) {
+        gameState.totalCriticals++;
+        gameState.criticalMultiplier = 2 + (gameState.upgrades.criticalPower - 1) * 0.5;
+        gameState.highestCritical = Math.max(gameState.highestCritical, gameState.criticalMultiplier);
+    }
+    return isCritical;
+}
+
+function calculateEarnings(isCritical) {
+    let earned = gameState.clickPower;
+    let multiplier = isCritical ? gameState.criticalMultiplier : 1;
+
+    calculateMultipliers();
+    multiplier *= gameState.multipliers.total;
+
+    return Math.floor(earned * multiplier);
+}
+
+function updateGameState(earned) {
+    gameState.balance += earned;
+    gameState.totalEarned += earned;
+    gameState.totalClicks++;
+    gameState.energy -= 1;
+    addXP(earned);
+}
+
+// Upgrade System
+function upgrade(type) {
+    const cost = UPGRADE_COSTS[type](gameState.upgrades[type] + (type === 'boost' ? 1 : 0));
+
+    if (gameState.balance >= cost) {
+        gameState.balance -= cost;
+        gameState.spentOnUpgrades += cost;
+        gameState.upgrades[type]++;
+
+        applyUpgradeEffects(type);
+        showNotification(`Улучшение "${getUpgradeName(type)}" куплено!`);
+        updateUI();
+        saveGameState();
+        addXP(cost * 0.2);
+    }
+}
+
+function applyUpgradeEffects(type) {
+    if (type === 'clickPower') {
+        gameState.clickPower = gameState.upgrades.clickPower;
+    } else if (type === 'energy') {
+        gameState.maxEnergy = 100 + (gameState.upgrades.energy - 1) * 20;
+        gameState.energy = gameState.maxEnergy;
+    }
+}
+
+function activateBoost() {
+    const cost = UPGRADE_COSTS.boost(gameState.upgrades.boost + 1);
+
+    if (gameState.balance >= cost) {
+        gameState.balance -= cost;
+        gameState.spentOnUpgrades += cost;
+        gameState.upgrades.boost++;
+        gameState.boostsUsed++;
+        gameState.boostEndTime = Date.now() + 3600000 * gameState.upgrades.boost;
+
+        elements.boostIndicator.style.display = 'block';
+        showNotification(`Буст активирован! Доход увеличен на ${gameState.upgrades.boost * 50}% на ${gameState.upgrades.boost} часов`);
+
+        updateUI();
+        saveGameState();
+    }
+}
+
+// Helper Functions
+function calculateMultipliers() {
+    const comboMult = gameState.combo > 1 ? 1 + gameState.combo * 0.05 : 1;
+    const boostMult = (gameState.upgrades.boost > 0 && Date.now() < gameState.boostEndTime) ?
+        1 + gameState.upgrades.boost * 0.5 : 1;
+
+    gameState.multipliers = {
+        combo: comboMult,
+        boost: boostMult,
+        total: comboMult * boostMult
+    };
+
+    gameState.highestMultiplier = Math.max(gameState.highestMultiplier, gameState.multipliers.total);
+}
+
+function addXP(amount) {
+    gameState.xp += amount;
+    const xpNeeded = XP_NEEDED(gameState.level);
+
+    if (gameState.xp >= xpNeeded) {
+        gameState.xp -= xpNeeded;
+        gameState.level++;
+        showNotification(`Уровень повышен! Теперь вы ${gameState.level} уровня!`);
+    }
+}
+
+function updateComboUI() {
+    if (gameState.combo > 1) {
+        elements.comboDisplay.innerHTML = `
+            <span class="combo-count">${gameState.combo}</span> комбо
+            <span class="combo-multiplier">x${(1 + gameState.combo * 0.05).toFixed(2)}</span>
+        `;
+        elements.comboDisplay.classList.add('active');
+    } else {
+        elements.comboDisplay.classList.remove('active');
+    }
+}
+
+// Animations
+function animateCoin() {
+    elements.coin.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        elements.coin.style.transform = 'scale(1)';
+    }, 100);
+}
+
+function createClickEffect(x, y, text, isCritical) {
+    const effect = document.createElement('div');
+    effect.className = isCritical ? 'critical-effect' : 'click-effect';
+    effect.textContent = text;
+    effect.style.left = `${x}px`;
+    effect.style.top = `${y}px`;
+
+    elements.coin.appendChild(effect);
+
+    setTimeout(() => {
+        effect.remove();
+    }, isCritical ? 1000 : 800);
+}
+
+// UI Updates
+function updateUI() {
+    updateMainTab();
+    updateEnergy();
+    updateMultipliers();
+    updateUpgradeButtons();
+    updateStats();
+}
+
+function updateMainTab() {
+    elements.balance.textContent = gameState.balance.toLocaleString();
+    elements.clickPower.textContent = gameState.clickPower;
+    elements.totalEarned.textContent = gameState.totalEarned.toLocaleString();
+    elements.autoClicker.textContent = gameState.upgrades.autoClicker;
+    elements.playerLevel.textContent = gameState.level;
+}
+
+function updateEnergy() {
+    const energyPercent = (gameState.energy / gameState.maxEnergy) * 100;
+    elements.energyText.textContent = `${Math.floor(gameState.energy)}/${gameState.maxEnergy}`;
+    elements.energyFill.style.width = `${energyPercent}%`;
+    elements.energyValue.textContent = `${Math.floor(energyPercent)}%`;
+}
+
+function updateMultipliers() {
+    elements.currentMultiplier.textContent = gameState.multipliers.total.toFixed(2);
+}
+
+function updateUpgradeButtons() {
+    elements.clickPowerLevel.textContent = gameState.upgrades.clickPower;
+    elements.clickPowerValue.textContent = gameState.upgrades.clickPower;
+    elements.autoClickerLevel.textContent = gameState.upgrades.autoClicker;
+    elements.autoClickerValue.textContent = 500 * gameState.upgrades.autoClicker;
+    elements.energyLevel.textContent = gameState.upgrades.energy;
+    elements.energyMaxValue.textContent = 100 + (gameState.upgrades.energy - 1) * 20;
+
+    elements.clickUpgradeCost.textContent = UPGRADE_COSTS.clickPower(gameState.upgrades.clickPower).toLocaleString();
+    elements.autoUpgradeCost.textContent = UPGRADE_COSTS.autoClicker(gameState.upgrades.autoClicker).toLocaleString();
+    elements.energyUpgradeCost.textContent = UPGRADE_COSTS.energy(gameState.upgrades.energy).toLocaleString();
+
+    elements.upgradeClickBtn.disabled = gameState.balance < UPGRADE_COSTS.clickPower(gameState.upgrades.clickPower);
+    elements.upgradeAutoBtn.disabled = gameState.balance < UPGRADE_COSTS.autoClicker(gameState.upgrades.autoClicker);
+    elements.upgradeEnergyBtn.disabled = gameState.balance < UPGRADE_COSTS.energy(gameState.upgrades.energy);
+}
+
+function updateStats() {
+    elements.statsTotalClicks.textContent = gameState.totalClicks.toLocaleString();
+    elements.statsTotalEarned.textContent = gameState.totalEarned.toLocaleString();
+    elements.statsAutoEarned.textContent = gameState.autoEarned.toLocaleString();
+    elements.statsSpent.textContent = gameState.spentOnUpgrades.toLocaleString();
+
+    const hours = Math.floor(gameState.playTime / 3600);
+    const minutes = Math.floor((gameState.playTime % 3600) / 60);
+    const seconds = gameState.playTime % 60;
+    elements.statsPlayTime.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    const statsProgressPercent = (gameState.xp / XP_NEEDED(gameState.level)) * 100;
+    elements.statsLevelProgress.style.width = `${statsProgressPercent}%`;
+}
+
+// Achievements System
+function checkAchievements() {
+    let newAchievements = false;
+
+    ACHIEVEMENTS.forEach(achievement => {
+        if (!gameState.achievements.includes(achievement.id) && achievement.condition(gameState)) {
+            unlockAchievement(achievement);
+            newAchievements = true;
+        }
+    });
+
+    if (newAchievements) {
+        renderAchievements();
+        updateUI();
+    }
+}
+
+function unlockAchievement(achievement) {
+    gameState.achievements.push(achievement.id);
+    gameState.balance += achievement.reward;
+    showNotification(`Достижение "${achievement.name}" разблокировано! +${achievement.reward} DDC`);
+}
+
+function renderAchievements() {
+    elements.achievementsContainer.innerHTML = '';
+
+    ACHIEVEMENTS.forEach(achievement => {
+        const isUnlocked = gameState.achievements.includes(achievement.id);
+        const achievementCard = document.createElement('div');
+        achievementCard.className = `achievement-card ${isUnlocked ? 'unlocked' : ''}`;
+
+        achievementCard.innerHTML = `
+            <div class="achievement-icon">${achievement.icon}</div>
+            <div class="achievement-info">
+                <h3>${achievement.name}</h3>
+                <p>${achievement.description}</p>
+                ${isUnlocked ? `<div class="achievement-reward">+${achievement.reward} DDC</div>` : ''}
+            </div>
+        `;
+
+        elements.achievementsContainer.appendChild(achievementCard);
+    });
+}
+
+// Save/Load System
+function saveGameState() {
+    const saveData = {
+        ...gameState,
+        startTime: undefined,
+        comboTimeout: null
+    };
+    localStorage.setItem('dankDoshCoinSave', JSON.stringify(saveData));
+}
+
+function loadGameState() {
+    const saveData = JSON.parse(localStorage.getItem('dankDoshCoinSave'));
+    if (saveData) {
+        Object.assign(gameState, saveData);
+    }
+
+    // Reinitialize computed values
+    gameState.maxEnergy = 100 + (gameState.upgrades.energy - 1) * 20;
+    gameState.energy = Math.min(gameState.energy, gameState.maxEnergy);
+    gameState.clickPower = gameState.upgrades.clickPower;
+    gameState.startTime = Date.now();
+
+    if (gameState.upgrades.boost > 0 && Date.now() > gameState.boostEndTime) {
+        gameState.upgrades.boost = 0;
+    }
+}
+
+// Utility Functions
+function checkConsecutiveDays() {
+    const today = new Date().toDateString();
+    const lastPlayed = new Date(gameState.lastPlayDate);
+    const currentDate = new Date();
+
+    if ((currentDate - lastPlayed) > 86400000 * 2) {
+        gameState.consecutiveDays = 1;
+    } else if ((currentDate - lastPlayed) <= 86400000 * 2 && (currentDate - lastPlayed) > 86400000) {
+        gameState.consecutiveDays++;
+    }
+
+    gameState.lastPlayDate = today;
+}
+
+function showNotification(message) {
+    elements.notification.textContent = message;
+    elements.notification.classList.add('show');
+
+    setTimeout(() => {
+        elements.notification.classList.remove('show');
+    }, 3000);
+}
+
+function switchTab(tabId) {
+    elements.tabButtons.forEach(button => {
+        button.classList.toggle('active', button.dataset.tab === tabId);
+    });
+
+    elements.tabContents.forEach(content => {
+        content.classList.toggle('active', content.id === tabId);
+    });
+}
+
+function getUpgradeName(type) {
+    const names = {
+        clickPower: 'Сила клика',
+        autoClicker: 'Автокликер',
+        energy: 'Энергия',
+        comboTime: 'Время комбо',
+        criticalChance: 'Шанс крита',
+        criticalPower: 'Сила крита',
+        boost: 'Буст доходности'
+    };
+    return names[type] || type;
+}
+
+// Initialize the game
+document.addEventListener('DOMContentLoaded', initGame);
