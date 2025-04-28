@@ -148,6 +148,27 @@ function initGame() {
     loadGameState();
     checkConsecutiveDays();
     setupEventListeners();
+    // Обработчики для мобильных устройств
+    const coin = document.getElementById('coin');
+    
+    // Отключаем стандартное поведение
+    coin.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        this.classList.add('active');
+    }, {passive: false});
+
+    coin.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        this.classList.remove('active');
+        handleCoinClick(); // Ваша функция обработки клика
+    }, {passive: false});
+
+    // Дополнительная защита для iOS
+    document.addEventListener('touchmove', function(e) {
+        if (e.target === coin || e.target.closest('.coin')) {
+            e.preventDefault();
+        }
+    }, {passive: false});
 
     // Инициализация изображения монеты
 elements.coin.innerHTML = `
