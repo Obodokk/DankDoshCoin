@@ -747,7 +747,36 @@ body {
     }
 }
 
+@media (max-width: 350px) {
+    .coin {
+        width: 82vw;
+        height: 82vw;
+    }
 
+    .tab-button {
+        font-size: 0.8rem;
+        padding: 8px 4px;
+    }
+}
+
+@media (min-width: 481px) {
+    .app-container {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 @supports (-webkit-touch-callout: none) {
     .tab-content#main {
