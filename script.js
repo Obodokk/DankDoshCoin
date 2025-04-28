@@ -411,11 +411,7 @@ function updateUI() {
     elements.energyFill.style.width = `${energyPercent}%`;
     elements.energyValue.textContent = `${Math.floor(energyPercent)}%`;
 
-    // Прогресс уровня
-    const xpNeeded = XP_NEEDED(gameState.level);
-    const progressPercent = (gameState.xp / xpNeeded) * 100;
-    elements.levelProgress.style.width = `${progressPercent}%`;
-    elements.levelProgressText.textContent = `${gameState.xp}/${xpNeeded}`;
+
 
     // Множители
     elements.currentMultiplier.textContent = gameState.multipliers.total.toFixed(2);
