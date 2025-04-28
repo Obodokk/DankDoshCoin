@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DankDosh - Pixel Clicker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Языковой переключатель -->
+        <div class="language-switcher">
+            <button id="lang-en">EN</button>
+            <button id="lang-ru">RU</button>
+        </div>
+
+        <!-- Основной экран -->
+        <div class="main-screen active-tab" data-tab="main">
+            <div class="header">
+                <div class="balance">
+                    <span id="coins">0</span>
+                    <img src="assets/DankDoshCoin.png" alt="DankDosh Coin" class="coin-icon">
+                </div>
+                <div class="energy">
+                    <span id="energy">100</span>/<span id="max-energy">100</span> ⚡
+                </div>
+            </div>
+
+            <div class="click-area">
+                <img src="assets/DankDoshCoin.png" alt="Click me!" class="click-coin" id="click-coin">
+                <div class="combo-display" id="combo-display"></div>
+            </div>
+
+            <div class="bot-farm">
+                <div class="bot-progress">
+                    <div class="progress-bar" id="bot-progress"></div>
+                </div>
+                <button class="collect-btn" id="collect-bot">🔄 Collect</button>
+                <div class="bot-time" id="bot-time">Ready!</div>
+            </div>
+
+            <div class="multiplier-display" id="multiplier">x1.0</div>
+        </div>
+
+        <!-- Вкладка улучшений -->
+        <div class="upgrades-screen" data-tab="upgrades">
+            <h2>🔧 Upgrades</h2>
+            <div class="upgrades-list" id="upgrades-list">
+                <!-- Сгенерируется через JS -->
+            </div>
+        </div>
+
+        <!-- Вкладка достижений -->
+        <div class="achievements-screen" data-tab="achievements">
+            <h2>🏆 Achievements</h2>
+            <div class="achievements-list" id="achievements-list">
+                <!-- Сгенерируется через JS -->
+            </div>
+        </div>
+
+        <!-- Вкладка друзей/рефералов -->
+        <div class="friends-screen" data-tab="friends">
+            <h2>👥 Friends</h2>
+            <div class="referral-code">
+                <p>Your referral code:</p>
+                <input type="text" id="referral-code" readonly>
+                <button id="copy-referral">Copy</button>
+            </div>
+            <div class="referral-stats">
+                <p>Invited friends: <span id="invited-count">0</span></p>
+                <p>Earned from friends: <span id="earned-from-friends">0</span></p>
+            </div>
+            <div class="referral-bonuses">
+                <h3>Referral Bonuses</h3>
+                <ul id="referral-bonuses-list">
+                    <!-- Сгенерируется через JS -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Вкладка ежедневного бонуса -->
+        <div class="daily-screen" data-tab="daily">
+            <h2>🎁 Daily Reward</h2>
+            <div class="daily-reward">
+                <div class="daily-timer" id="daily-timer">Available now!</div>
+                <button class="daily-claim" id="claim-daily">Claim Reward</button>
+                <div class="daily-amount" id="daily-amount">Today's reward: 1000</div>
+            </div>
+        </div>
+
+        <!-- Навигационное меню -->
+        <div class="nav-menu">
+            <button class="nav-btn active" data-tab="main">🏠</button>
+            <button class="nav-btn" data-tab="upgrades">🔧</button>
+            <button class="nav-btn" data-tab="achievements">🏆</button>
+            <button class="nav-btn" data-tab="friends">👥</button>
+            <button class="nav-btn" data-tab="daily">🎁</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
