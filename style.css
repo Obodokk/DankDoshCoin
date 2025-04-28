@@ -90,10 +90,13 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     overflow-x: auto;
     padding-bottom: 5px;
+    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+    white-space: nowrap; /* Запрещаем перенос текста */
+    flex-wrap: nowrap; /* Запрещаем перенос на новую строку */
 }
 
 .tabs::-webkit-scrollbar {
-    display: none;
+    display: none; /* Скрываем скроллбар в Chrome/Safari */
 }
 
 .tab-button {
