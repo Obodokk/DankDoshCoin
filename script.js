@@ -423,6 +423,8 @@ function updateUI() {
     updateStats();
 }
 
+
+
 function updateUpgradeButtons() {
     elements.clickPowerLevel.textContent = gameState.upgrades.clickPower;
     elements.clickPowerValue.textContent = gameState.upgrades.clickPower;
@@ -478,6 +480,7 @@ function updateStats() {
     const statsProgressPercent = (gameState.xp / XP_NEEDED(gameState.level)) * 100;
     elements.statsLevelProgress.style.width = `${statsProgressPercent}%`;
 }
+
 
 // Достижения
 function checkAchievements() {
