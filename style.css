@@ -1,0 +1,462 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #1a1a2e;
+    color: #e6e6e6;
+    overflow: hidden;
+    touch-action: manipulation;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #16213e;
+    overflow: hidden;
+}
+
+.top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #0f3460;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 60px;
+}
+
+.balance-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.coin-icon {
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+}
+
+.energy-container {
+    display: flex;
+    align-items: center;
+}
+
+.energy-bar {
+    width: 80px;
+    height: 15px;
+    background-color: #333;
+    border-radius: 7px;
+    overflow: hidden;
+    margin-right: 5px;
+}
+
+.energy-fill {
+    height: 100%;
+    width: 100%;
+    background-color: #4CAF50;
+    transition: width 0.3s;
+}
+
+.coin-container {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.main-coin {
+    width: 70%;
+    max-width: 300px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.1s;
+    touch-action: manipulation;
+    z-index: 1;
+}
+
+.main-coin:active {
+    transform: scale(0.95);
+}
+
+.bot-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0f3460;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+}
+
+.bot-progress-container {
+    flex-grow: 1;
+    height: 15px;
+    background-color: #333;
+    border-radius: 7px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.bot-progress {
+    height: 100%;
+    width: 0%;
+    background-color: #FFD700;
+    transition: width 0.5s;
+}
+
+.collect-btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.collect-btn:active {
+    background-color: #3e8e41;
+}
+
+.nav-panel {
+    display: flex;
+    justify-content: space-around;
+    background-color: #0f3460;
+    padding: 10px;
+    border-radius: 10px;
+    height: 60px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.nav-btn.active {
+    color: #FFD700;
+    transform: scale(1.2);
+}
+
+.nav-btn:active {
+    transform: scale(0.9);
+}
+
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.coin-popup {
+    position: absolute;
+    color: #FFD700;
+    font-weight: bold;
+    pointer-events: none;
+    animation: coin-float 1s forwards;
+    z-index: 10;
+    font-size: 20px;
+}
+
+@keyframes coin-float {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    background-color: #16213e;
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    border: 2px solid #0f3460;
+}
+
+.modal h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #FFD700;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.upgrades-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upgrade-item {
+    background-color: #0f3460;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.upgrade-info {
+    flex-grow: 1;
+}
+
+.upgrade-name {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.upgrade-level {
+    font-size: 10px;
+    color: #aaa;
+}
+
+.upgrade-price {
+    font-size: 12px;
+    color: #FFD700;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.buy-btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.buy-btn:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+}
+
+.buy-btn:active:not(:disabled) {
+    background-color: #3e8e41;
+}
+
+.achievements-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.achievement-item {
+    background-color: #0f3460;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.achievement-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.achievement-name {
+    font-size: 10px;
+    margin-bottom: 5px;
+}
+
+.achievement-desc {
+    font-size: 8px;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.achievement-reward {
+    font-size: 9px;
+    color: #FFD700;
+}
+
+.achievement-locked {
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+
+.achievement-unlocked .achievement-icon {
+    color: #FFD700;
+}
+
+.referral-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #0f3460;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.copy-btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.copy-btn:active {
+    background-color: #3e8e41;
+}
+
+.referral-stats {
+    background-color: #0f3460;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.referral-stats p {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.referral-bonuses {
+    background-color: #0f3460;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.bonus-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.bonus-completed {
+    color: #4CAF50;
+}
+
+.daily-timer {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.daily-amount {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.claim-btn {
+    display: block;
+    width: 100%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.claim-btn:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+}
+
+.claim-btn:active:not(:disabled) {
+    background-color: #3e8e41;
+}
+
+@keyframes click-animation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.click-animation {
+    animation: click-animation 0.1s;
+}
+
+.hidden {
+    display: none !important;
+}
