@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <title>Lottery</title>
+    <!-- Базовые мета-теги -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="color-scheme" content="light dark">
+
+    <!-- SEO и соц. сети -->
+    <meta name="description" content="CryptoLotto - децентрализованная криптовалютная лотерея">
+    <meta name="keywords" content="криптовалюта, лотерея, USDT, Polygon, блокчейн">
+    <meta property="og:title" content="CryptoLotto">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com">
+    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+
+
+    <!-- Основные стили -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+
+    <!-- Шрифты и иконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Название страницы (динамическое) -->
+    <title>CryptoLotto - Криптовалютная лотерея</title>
+
+    <!-- Предзагрузка важных ресурсов -->
+    <link rel="preload" href="js/main.js" as="script">
+    <link rel="preload" href="images/background.jpg" as="image">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-coins"></i>
+                <span><a class="logo" href="index.html">CryptoLotto</a></span>
+            </div>
+            <nav>
+              <ul>
+                <li><a href="index.html" data-i18n-menu="menu_home">Главная</a></li>
+                <li><a href="lottery.html" data-i18n-menu="menu_lottery">Лотерея</a></li>
+                <li><a href="winners.html" data-i18n-menu="menu_winners">Победители</a></li>
+                <li><a href="faq.html" data-i18n-menu="menu_faq">FAQ</a></li>
+                <li><a href="contacts.html" data-i18n-menu="menu_contacts">Контакты</a></li>
+                <li><a href="#" id="connectWalletBtn" data-i18n-menu="connect_wallet">Подключить кошелек</a></li>
+              </ul>
+            </nav>
+            <div class="header-right">
+                <button class="theme-toggle" aria-label="Переключить тему">
+                    <i class="theme-icon fas fa-moon"></i>
+                </button>
+                <div class="language-switcher">
+                    <select id="languageSelect">
+                        <option value="ru">Рус</option>
+                        <option value="en">Eng</option>
+                    </select>
+                </div>
+                <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <section class="lottery-section">
+        <div class="container">
+            <div class="lottery-content">
+                <div class="lottery-info">
+                    <h1 data-i18n="lottery_title">Купить билеты</h1>
+                    <p data-i18n="lottery_subtitle">Каждый билет увеличивает ваши шансы на победу!</p>
+
+                    <div class="jackpot-info">
+                        <div class="info-item">
+                            <span data-i18n="current_jackpot">Текущий джекпот:</span>
+                            <span class="amount current-jackpot">Загрузка...</span>
+                        </div>
+                        <div class="info-item">
+                            <span data-i18n="ticket_price">Цена билета:</span>
+                            <span class="amount">10 USDT</span>
+                        </div>
+                        <div class="info-item">
+                            <span data-i18n="next_draw">Следующий розыгрыш:</span>
+                            <span class="amount" id="nextDrawDate">Каждые 3 дня, 20:00 GMT</span>
+                        </div>
+                    </div>
+
+                    <div class="ticket-selector">
+                        <h3 data-i18n="select_tickets">Выберите количество билетов</h3>
+                        <div class="ticket-options">
+                            <button class="ticket-option text-white" data-count="1">1</button>
+                            <button class="ticket-option text-white" data-count="5">5</button>
+                            <button class="ticket-option text-white" data-count="10">10</button>
+                            <button class="ticket-option text-white" data-count="20">20</button>
+                            <button class="ticket-option text-white" data-count="50">50</button>
+                        </div>
+                        <div class="custom-tickets">
+                            <input type="number" id="customTicketCount" min="1" max="100" placeholder="Или введите свое число">
+                            <button id="setCustomTickets" data-i18n="set_button">Установить</button>
+                        </div>
+                        <div class="total-cost">
+                            <span data-i18n="total_cost">Общая стоимость:</span>
+                            <span id="totalAmount">0 USDT</span>
+                        </div>
+                        <button id="buyTicketsBtn" class="btn btn-primary" data-i18n="buy_button">Купить билеты</button>
+                    </div>
+                </div>
+
+                <div class="chance-calculator">
+                    <h2 data-i18n="chance_title">Ваши шансы на победу</h2>
+                    <div class="chance-meter">
+                        <div class="meter-bar" id="chanceBar"></div>
+                        <div class="meter-text" id="chanceText">0%</div>
+                    </div>
+                    <p class="chance-note" data-i18n="chance_note">Чем больше билетов вы покупаете, тем выше ваши шансы на победу. Все билеты участвуют в одном розыгрыше.</p>
+
+                    <div class="your-tickets">
+                        <h3 data-i18n="your_tickets">Ваши билеты</h3>
+                        <div class="ticket-count" id="userTicketCount">0</div>
+                        <p data-i18n="ticket_note">Билеты автоматически регистрируются после покупки</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-to-play">
+        <div class="container">
+            <h2 data-i18n="how_to_play">Как участвовать</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-content">
+                        <h3 data-i18n="play_step1">Подключите кошелек</h3>
+                        <p data-i18n="play_step1_desc">Используйте MetaMask или другой Web3 кошелек с поддержкой сети Polygon</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-content">
+                        <h3 data-i18n="play_step2">Выберите билеты</h3>
+                        <p data-i18n="play_step2_desc">1 билет = 10 USDT. Чем больше билетов, тем выше шанс!</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-content">
+                        <h3 data-i18n="play_step3">Подтвердите транзакцию</h3>
+                        <p data-i18n="play_step3_desc">Подтвердите транзакцию в вашем кошельке. Комиссия сети оплачивается отдельно</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-content">
+                        <h3 data-i18n="play_step4">Дождитесь розыгрыша</h3>
+                        <p data-i18n="play_step4_desc">Розыгрыш проходит автоматически каждую неделю</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="logo">
+              <i class="fas fa-coins"></i>
+              <span data-i18n="footer_title">CryptoLotto</span>
+            </div>
+            <p data-i18n="footer_desc">Децентрализованная криптовалютная лотерея на блокчейне Polygon</p>
+            <div class="social-links">
+              <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+              <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3 data-i18n="links_title">Ссылки</h3>
+            <ul>
+              <li><a href="about.html" data-i18n="menu_about">О проекте</a></li>
+              <li><a href="faq.html" data-i18n="menu_faq">FAQ</a></li>
+              <li><a href="winners.html" data-i18n="menu_winners">Победители</a></li>
+              <li><a href="contacts.html" data-i18n="menu_contacts">Контакты</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3 data-i18n="legal_title">Правовая информация</h3>
+            <ul>
+              <li><a href="#" data-i18n="terms_link">Условия использования</a></li>
+              <li><a href="#" data-i18n="privacy_link">Политика конфиденциальности</a></li>
+              <li><a href="#" data-i18n="risk_link">Предупреждение о рисках</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="copyright">
+          <p data-i18n="copyright_text">&copy; 2023 CryptoLotto. Все права защищены.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
+    <script src="js/jackpot.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/lottery.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/translations.js"></script>
+</body>
+</html>
