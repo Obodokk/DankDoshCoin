@@ -60,7 +60,7 @@ header {
 .logo img {
   height: 45px;
   border-radius: 50%;
-  border: 2px solid var(--light);
+  border: 1px solid var(--light);
 }
 
 .logo h1 {
@@ -306,8 +306,8 @@ footer p {
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
-    gap: 15px;
-    font-size: 11px;
+    gap: 10px;
+    font-size: 13px;
 
   }
 
@@ -654,10 +654,10 @@ footer p {
   nav a i {
     display: block;
     margin: 0 auto 5px;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   nav a {
     text-align: center;
-    padding: 8px 5px;
+    padding: 2px 3px;
   }
 }
