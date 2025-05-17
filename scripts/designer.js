@@ -17,14 +17,16 @@ document.addEventListener('DOMContentLoaded', function() {
     textAlign: 'center',
     activeTool: 'select',
     template: null,
-    zoom: 0.3,
+    zoom: 1.0,
     cliparts: [],
     nextId: 1,
     currentTemplate: null,
     backgroundImage: null,
     rotationStep: 15,
     flipX: false,
-    flipY: false
+    flipY: false,
+    isMobile: window.matchMedia("(max-width: 768px)").matches,
+    baseScale: 1.0
   };
 
   const elements = {
@@ -50,29 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
     saveDesignBtn: document.getElementById('save-design')
   };
 
-  // Мобильное меню
-document.addEventListener('DOMContentLoaded', function() {
-  const menuToggle = document.querySelector('.mobile-menu-toggle');
-  const mobileMenu = document.querySelector('.mobile-menu');
-
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', function() {
-      mobileMenu.classList.toggle('active');
-      menuToggle.innerHTML = mobileMenu.classList.contains('active')
-        ? '<i class="fas fa-times"></i>'
-        : '<i class="fas fa-bars"></i>';
-    });
-
-    // Закрытие меню при клике на пункт
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-      });
-    });
-  }
-});
-
   fabric.Object.prototype.set({
     borderColor: '#6a5acd',
     cornerColor: '#6a5acd',
@@ -86,43 +65,77 @@ document.addEventListener('DOMContentLoaded', function() {
   function initCanvasSize() {
     const container = elements.previewContainer;
     canvas.setWidth(container.clientWidth);
-    canvas.setHeight(Math.min(container.clientWidth * 1.5, 700));
-    canvas.renderAll();
-    updateZoom();
+    canvas.setHeight(state.isMobile ? container.clientWidth * 1.2 : container.clientWidth * 1.5);
+
+    if (state.isMobile) {
+      elements.zoomSlider.min = 60;
+      elements.zoomSlider.max = 150;
+      elements.zoomSlider.value = 80;
+      state.zoom = 0.8;
+    } else {
+      elements.zoomSlider.min = 30;
+      elements.zoomSlider.max = 150;
+      elements.zoomSlider.value = 50;
+      state.zoom = 0.5;
+    }
+
+    updateZoomDisplay();
+
+    if (state.glassType) {
+      loadGlass(state.glassType);
+    }
   }
 
-  function updateZoom() {
-    if (state.backgroundImage) {
-      state.backgroundImage.scale(state.zoom);
-      canvas.renderAll();
-    }
+  function updateZoomDisplay() {
     elements.zoomValue.textContent = Math.round(state.zoom * 100) + '%';
+    elements.zoomSlider.value = state.zoom * 100;
   }
 
   function loadGlass(glassType) {
     state.glassType = glassType;
     fabric.Image.fromURL(`images/${glassType}-glass.png`, function(img) {
-      const scale = Math.min(
-        canvas.width / img.width,
-        canvas.height / img.height
-      ) * 0.9 * state.zoom;
+      if (state.backgroundImage) {
+        canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
+      }
 
-      img.scale(scale);
+      state.baseScale = Math.min(
+        canvas.width * 0.8 / img.width,
+        canvas.height * 0.8 / img.height
+      );
+
       img.set({
+        scaleX: state.baseScale * state.zoom,
+        scaleY: state.baseScale * state.zoom,
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        originX: 'center',
+        originY: 'center',
         selectable: false,
         evented: false
       });
 
       state.backgroundImage = img;
-
       canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
         originX: 'center',
         originY: 'center',
         left: canvas.width / 2,
         top: canvas.height / 2
       });
-      updateZoom();
+
+      canvas.renderAll();
     }, { crossOrigin: 'anonymous' });
+  }
+
+  function updateZoom() {
+    if (!state.backgroundImage) return;
+
+    state.backgroundImage.set({
+      scaleX: state.baseScale * state.zoom,
+      scaleY: state.baseScale * state.zoom
+    });
+
+    canvas.renderAll();
+    updateZoomDisplay();
   }
 
   function loadTemplate(templateName) {
@@ -438,29 +451,27 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function showNotification(message, type = 'success') {
-      // Создаем элемент уведомления
-      const notification = document.createElement('div');
-      notification.className = `notification ${type} show`;
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+      <div class="notification-content">
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+        <span>${message}</span>
+      </div>
+    `;
 
-      // Добавляем иконку в зависимости от типа
-      const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-      notification.innerHTML = `
-          <div class="notification-content">
-              <i class="fas ${icon}"></i>
-              <span>${message}</span>
-          </div>
-      `;
+    document.body.appendChild(notification);
 
-      // Добавляем уведомление в body
-      document.body.appendChild(notification);
+    setTimeout(() => {
+      notification.classList.add('show');
+    }, 10);
 
-      // Удаляем уведомление через 3 секунды
+    setTimeout(() => {
+      notification.classList.remove('show');
       setTimeout(() => {
-          notification.classList.remove('show');
-          setTimeout(() => {
-              notification.remove();
-          }, 300);
-      }, 3000);
+        notification.remove();
+      }, 300);
+    }, 3000);
   }
 
   function saveDesign() {
@@ -511,9 +522,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedDesign) {
       const design = JSON.parse(savedDesign);
       state.glassType = design.glassType;
-      state.zoom = design.zoom || 0.3;
-      elements.zoomSlider.value = state.zoom * 100;
-      elements.zoomValue.textContent = Math.round(state.zoom * 100) + '%';
+      state.zoom = design.zoom || (state.isMobile ? 0.8 : 0.5);
+
+      if (state.isMobile) {
+        elements.zoomSlider.min = 60;
+        elements.zoomSlider.value = 80;
+      } else {
+        elements.zoomSlider.min = 30;
+        elements.zoomSlider.value = 50;
+      }
+
+      updateZoomDisplay();
 
       loadGlass(design.glassType);
 
@@ -607,7 +626,6 @@ document.addEventListener('DOMContentLoaded', function() {
   function setupEventListeners() {
     window.addEventListener('resize', function() {
       initCanvasSize();
-      loadGlass(state.glassType);
       canvas.renderAll();
     });
 
