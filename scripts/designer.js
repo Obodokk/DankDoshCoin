@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
       elements.zoomSlider.min = 60;
       elements.zoomSlider.max = 150;
       elements.zoomSlider.value = 60;
-      state.zoom = 0.5;
+      state.zoom = 0.6;
     }
 
     updateZoomDisplay();
