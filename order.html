@@ -117,14 +117,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
   <!-- Основной скрипт -->
   <script src="scripts/order.js"></script>
-
-  <!-- Инициализация маски телефона -->
-  <script>
-    document.getElementById('phone').addEventListener('input', function(e) {
-      const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-      e.target.value = '+7' + (x[2] ? ' (' + x[2] : '') + (x[3] ? ') ' + x[3] : '') +
-                       (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
-    });
-  </script>
 </body>
 </html>
