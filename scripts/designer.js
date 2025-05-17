@@ -73,9 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
       elements.zoomSlider.value = 80;
       state.zoom = 0.8;
     } else {
-      elements.zoomSlider.min = 30;
+      elements.zoomSlider.min = 60;
       elements.zoomSlider.max = 150;
-      elements.zoomSlider.value = 50;
+      elements.zoomSlider.value = 60;
       state.zoom = 0.5;
     }
 
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.zoomSlider.min = 60;
         elements.zoomSlider.value = 80;
       } else {
-        elements.zoomSlider.min = 30;
+        elements.zoomSlider.min = 60;
         elements.zoomSlider.value = 50;
       }
 
