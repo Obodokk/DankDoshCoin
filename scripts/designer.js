@@ -50,6 +50,29 @@ document.addEventListener('DOMContentLoaded', function() {
     saveDesignBtn: document.getElementById('save-design')
   };
 
+  // Мобильное меню
+document.addEventListener('DOMContentLoaded', function() {
+  const menuToggle = document.querySelector('.mobile-menu-toggle');
+  const mobileMenu = document.querySelector('.mobile-menu');
+
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', function() {
+      mobileMenu.classList.toggle('active');
+      menuToggle.innerHTML = mobileMenu.classList.contains('active')
+        ? '<i class="fas fa-times"></i>'
+        : '<i class="fas fa-bars"></i>';
+    });
+
+    // Закрытие меню при клике на пункт
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+      });
+    });
+  }
+});
+
   fabric.Object.prototype.set({
     borderColor: '#6a5acd',
     cornerColor: '#6a5acd',
@@ -415,27 +438,29 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-      <div class="notification-content">
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-        <span>${message}</span>
-      </div>
-    `;
+      // Создаем элемент уведомления
+      const notification = document.createElement('div');
+      notification.className = `notification ${type} show`;
 
-    document.body.appendChild(notification);
+      // Добавляем иконку в зависимости от типа
+      const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+      notification.innerHTML = `
+          <div class="notification-content">
+              <i class="fas ${icon}"></i>
+              <span>${message}</span>
+          </div>
+      `;
 
-    setTimeout(() => {
-      notification.classList.add('show');
-    }, 10);
+      // Добавляем уведомление в body
+      document.body.appendChild(notification);
 
-    setTimeout(() => {
-      notification.classList.remove('show');
+      // Удаляем уведомление через 3 секунды
       setTimeout(() => {
-        notification.remove();
-      }, 300);
-    }, 3000);
+          notification.classList.remove('show');
+          setTimeout(() => {
+              notification.remove();
+          }, 300);
+      }, 3000);
   }
 
   function saveDesign() {
