@@ -11,6 +11,272 @@
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+
+    .designer-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .designer-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .designer-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    @media (min-width: 992px) {
+      .designer-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .preview-container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    #glass-preview-container {
+      flex: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #glass-preview {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .controls-container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      height: 100%;
+    }
+
+    .controls-tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 10px 15px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text);
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .glass-options, .template-options, .cliparts-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .option-card {
+      border: 2px solid #eee;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .option-card:hover, .option-card.selected {
+      border-color: var(--primary);
+    }
+
+    .option-card.selected {
+      background-color: rgba(106, 90, 205, 0.05);
+    }
+
+    .option-card img {
+      width: 100%;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .text-controls {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .text-align-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .tool-button {
+      padding: 8px 12px;
+      background-color: var(--light);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tool-button:hover, .tool-button.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .color-picker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .color-option {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .color-option.selected {
+      border-color: var(--dark);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .layers-panel {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .layer-item {
+      padding: 8px 12px;
+      margin-bottom: 5px;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .layer-item.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .layer-item:hover {
+      background-color: #e6e6fa;
+    }
+
+    .layer-item.active:hover {
+      background-color: #5a4acd;
+    }
+
+    .zoom-controls {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .zoom-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: #ddd;
+      outline: none;
+    }
+
+    .zoom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+    }
+
+    .zoom-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .glass-options, .template-options, .cliparts-options {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      }
+
+      .controls-tabs {
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+      }
+    }
+
+
 * {
   margin: 0;
   padding: 0;
@@ -696,10 +962,28 @@ footer p {
     order: 1; /* Панель управления будет выше превью на мобильных */
   }
 }
+#glass-preview, #design-preview {
+    display: block;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
 #glass-preview {
   max-width: 100%;
   max-height: 100%;
   display: block;
   margin: 0 auto;
 }
-
+.loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+}
