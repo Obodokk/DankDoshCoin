@@ -1,5 +1,3 @@
-
-
 @font-face {
   font-family: 'Mon Amour One';
   src: url('../fonts/mon_amour_one_medium.woff2') format('woff2');
@@ -98,15 +96,12 @@
   font-style: normal;
 }
 
-
-
-
-
-
-
-
-
-
+@font-face {
+    font-family: 'Monly Lite';
+    src: local('Monly Lite Bold'), local('MonlyLite-Bold');
+    font-weight: 700;
+    font-style: normal;
+}
 
 
 
