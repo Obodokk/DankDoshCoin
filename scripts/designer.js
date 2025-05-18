@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     glassType: 'wine',
     texts: [],
     activeTextId: null,
-    font: 'Monly Lite Bold',
+    font: 'Monly Lite',
     fontSize: 24,
     color: '#8f8f8f',
     textAlign: 'center',
@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
       state.template = null;
     }
 
+
+    
     if (templateName !== 'none') {
       fabric.Image.fromURL(`images/templates/${templateName}`, function(img) {
         const scale = Math.min(
