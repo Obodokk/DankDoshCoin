@@ -18,6 +18,18 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Стили для выпадающего списка шрифтов */
+.font-select {
+  font-family: inherit; /* Наследует шрифт родителя для самого элемента select */
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.font-select option {
+  font-size: 16px; /* Размер шрифта для вариантов */
+  padding: 5px;
+}
+
 body {
   background-color: var(--background);
   color: var(--text);
