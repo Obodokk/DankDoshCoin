@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Настройки Telegram
     const BOT_TOKEN = '7865197370:AAEzaD6VKlIcXAnYOd4fpsM3WuSH-II1VDw';
-    const CHAT_ID = '7865197370';
+    const CHAT_ID = '-1002576018287';
 
     const glassTypeNames = {
         wine: '🍷 Винный бокал',
