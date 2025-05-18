@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     glassType: 'wine',
     texts: [],
     activeTextId: null,
-    font: 'Arial',
+    font: 'Monly Lite Bold',
     fontSize: 24,
     color: '#8f8f8f',
     textAlign: 'center',
