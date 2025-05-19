@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Множители масштаба
     const TEXT_SCALE_FACTOR = 1.6;
     const ELEMENT_SCALE_FACTOR = 1.6;
     const TEMPLATE_SCALE_FACTOR = 1.0;
     const PADDING_FACTOR = 0.85;
 
+    // Инициализация canvas
     const glassCanvas = new fabric.Canvas('glass-preview', {
         backgroundColor: 'transparent',
         preserveObjectStacking: true,
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         designLoaded: false
     };
 
+    // Настройки Telegram
     const BOT_TOKEN = '7865197370:AAEzaD6VKlIcXAnYOd4fpsM3WuSH-II1VDw';
     const CHAT_ID = '-1002576018287';
 
@@ -36,49 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         vodka: '❄️ Рюмка для водки (6шт)'
     };
 
-    const templateNames = {
-        'template1.png': 'Шаблон 1',
-        'template2.png': 'Шаблон 2',
-        'template3.png': 'Шаблон 3',
-        'template4.png': 'Шаблон 4',
-        'template5.png': 'Шаблон 5',
-        'template6.png': 'Шаблон 6',
-        'template7.png': 'Шаблон 7',
-        'template8.png': 'Шаблон 8',
-        'template9.png': 'Шаблон 9',
-        'template10.png': 'Шаблон 10',
-        'template11.png': 'Шаблон 11',
-        'template12.png': 'Шаблон 12',
-        'template13.png': 'Шаблон 13',
-        'template14.png': 'Шаблон 14',
-        'template15.png': 'Шаблон 15',
-        'template16.png': 'Шаблон 16',
-        'template17.png': 'Шаблон 17',
-        'template18.png': 'Шаблон 18',
-        'template19.png': 'Шаблон 19',
-        'template20.png': 'Шаблон 20',
-        'template21.png': 'Шаблон 21',
-        'template22.png': 'Шаблон 22',
-        'template23.png': 'Шаблон 23',
-        'template24.png': 'Шаблон 24',
-        'template25.png': 'Шаблон 25',
-        'template26.png': 'Шаблон 26',
-        'template27.png': 'Шаблон 27',
-        'template28.png': 'Шаблон 28',
-        'template29.png': 'Шаблон 29',
-        'template30.png': 'Шаблон 30',
-        'template31.png': 'Шаблон 31',
-        'template32.png': 'Шаблон 32',
-        'template33.png': 'Шаблон 33',
-        'template34.png': 'Шаблон 34',
-        'template35.png': 'Шаблон 35',
-        'template36.png': 'Шаблон 36',
-        'template37.png': 'Шаблон 37',
-        'template38.png': 'Шаблон 38',
-        'template39.png': 'Шаблон 39',
-        'template40.png': 'Шаблон 40'
-    };
-
+    // Функция загрузки изображения бокала
     function loadGlass(glassType) {
         state.glassType = glassType;
         fabric.Image.fromURL(`images/${glassType}-glass.png`, function(img) {
@@ -112,11 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { crossOrigin: 'anonymous' });
     }
 
+    // Функция загрузки дизайна
     function loadDesignContent(design) {
         state.design = design;
         state.designLoaded = true;
         designCanvas.clear();
 
+        // Рассчитываем масштаб для элементов
         const scale = Math.min(
             designCanvas.width * PADDING_FACTOR / design.canvasWidth,
             designCanvas.height * PADDING_FACTOR / design.canvasHeight
@@ -127,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const previewCenterX = designCanvas.width / 2;
         const previewCenterY = designCanvas.height / 2;
 
+        // Загрузка шаблона (если есть)
         if (design.template) {
             fabric.Image.fromURL(`images/templates/${design.template}`, function(img) {
                 const templateScale = Math.min(
@@ -152,7 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Функция загрузки элементов дизайна
     function loadDesignElements(design, scale, designCenterX, designCenterY, previewCenterX, previewCenterY) {
+        // Загрузка текстов
         if (design.texts && design.texts.length > 0) {
             design.texts.forEach(textObj => {
                 const offsetX = (textObj.left - designCenterX) * scale;
@@ -178,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        // Загрузка клипартов
         if (design.cliparts && design.cliparts.length > 0) {
             design.cliparts.forEach(clipartObj => {
                 fabric.Image.fromURL(`images/cliparts/${clipartObj.name}`, function(img) {
@@ -203,10 +170,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Настройка размеров canvas
     function setupCanvasSizes() {
         const glassContainer = document.querySelector('#glass-preview').parentElement;
         const designContainer = document.querySelector('#design-preview').parentElement;
 
+        // Увеличиваем размеры окон
         glassContainer.style.height = '550px';
         designContainer.style.height = '550px';
 
@@ -224,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // [Остальные функции без изменений...]
     function loadSavedDesign() {
         const savedDesign = localStorage.getItem('glassDesign');
         if (savedDesign) {
@@ -235,70 +205,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createTelegramMessage(formData) {
-        let message = `📦 *Новый заказ* \n\n` +
+        return `📦 *Новый заказ* \n\n` +
                `👤 *Имя*: ${formData.name}\n` +
                `📞 *Телефон*: ${formData.phone}\n` +
                `💬 *Соцсеть*: ${formData.social}\n` +
                `🏠 *Адрес*: ${formData.address || 'Не указан'}\n` +
                `💭 *Комментарий*: ${formData.comments || 'Нет комментариев'}\n\n` +
                `🛒 *Детали заказа*:\n` +
-               `- Бокал: ${glassTypeNames[formData.design?.glassType] || 'Не указан'}\n`;
-
-        if (formData.design?.template) {
-            message += `- Шаблон: ${templateNames[formData.design.template] || formData.design.template}\n`;
-        }
-
-        if (formData.design?.texts && formData.design.texts.length > 0) {
-            message += `- Тексты (${formData.design.texts.length}):\n`;
-            formData.design.texts.forEach((text, index) => {
-                message += `  ${index + 1}. "${text.text}" (шрифт: ${text.fontFamily}, размер: ${text.fontSize}px)\n`;
-            });
-        }
-
-        if (formData.design?.cliparts && formData.design.cliparts.length > 0) {
-            message += `- Элементы (${formData.design.cliparts.length}):\n`;
-            formData.design.cliparts.forEach((clipart, index) => {
-                message += `  ${index + 1}. ${clipart.displayName || clipart.name.replace('.png', '')}\n`;
-            });
-        }
-
-        message += `\n⏰ *Дата*: ${formData.date}`;
-        return message;
-    }
-
-    function sendDesignImageToTelegram(imageData) {
-        const formData = new FormData();
-        formData.append('chat_id', CHAT_ID);
-        formData.append('photo', imageData);
-        formData.append('caption', 'Дизайн бокала');
-
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-            method: 'POST',
-            body: formData
-        });
+               `- Бокал: ${glassTypeNames[formData.design?.glassType] || 'Не указан'}\n` +
+               `- Тексты: ${formData.design?.texts?.length || 0}\n` +
+               `- Элементы: ${formData.design?.cliparts?.length || 0}\n` +
+               `- Шаблон: ${formData.design?.template ? 'Да' : 'Нет'}\n\n` +
+               `⏰ *Дата*: ${formData.date}`;
     }
 
     function sendToTelegram(message) {
-        // Сначала отправляем текст
-        const textUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
-
-        // Затем отправляем изображение
-        designCanvas.getElement().toBlob(function(blob) {
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'design.png');
-            formData.append('caption', 'Предпросмотр дизайна');
-
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                method: 'POST',
-                body: formData
-            });
-        }, 'image/png');
-
-        // Отправка текста через iframe (для совместимости)
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
-        iframe.src = textUrl;
+        iframe.src = url;
         document.body.appendChild(iframe);
         setTimeout(() => iframe.remove(), 3000);
     }
@@ -340,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1500);
     });
 
+    // Инициализация
     window.addEventListener('load', function() {
         setupCanvasSizes();
         loadSavedDesign();
