@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="styles/main.css">
   <link rel="icon" href="images/logo.jpg">
   <!-- Font Awesome для иконок -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 <body>
   <header>
@@ -58,8 +59,9 @@
                    placeholder="Как к вам обращаться?" required>
           </div>
 
+
           <div class="form-group">
-            <label for="phone" class="required-field">Телефон</label>
+            <label for="phone" class="required-field ">Телефон</label>
             <input type="tel" id="phone" name="phone" class="form-control"
                    placeholder="+373 (__) ______" required>
           </div>
@@ -90,7 +92,7 @@
         </div>
 
         <button type="submit" id="submit-btn" class="btn">
-          <span class="spinner"><i class="fas fa-spinner fa-spin"></i></span>
+          <span class="spinner"><i class="fas fa-spinner"></i></span>
           <span class="btn-text">Подтвердить заказ</span>
         </button>
       </form>
@@ -115,5 +117,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
   <!-- Основной скрипт -->
   <script src="scripts/order.js"></script>
+
+  <!-- Инициализация маски телефона -->
 </body>
 </html>
