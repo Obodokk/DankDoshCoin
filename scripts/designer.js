@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    
+
     if (templateName !== 'none') {
       fabric.Image.fromURL(`images/templates/${templateName}`, function(img) {
         const scale = Math.min(
