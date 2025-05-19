@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Множители масштаба
     const TEXT_SCALE_FACTOR = 1.6;
     const ELEMENT_SCALE_FACTOR = 1.6;
     const TEMPLATE_SCALE_FACTOR = 1.0;
     const PADDING_FACTOR = 0.85;
 
+    // Инициализация canvas
     const glassCanvas = new fabric.Canvas('glass-preview', {
         backgroundColor: 'transparent',
         preserveObjectStacking: true,
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         designLoaded: false
     };
 
+    // Настройки Telegram
     const BOT_TOKEN = '7865197370:AAEzaD6VKlIcXAnYOd4fpsM3WuSH-II1VDw';
     const CHAT_ID = '-1002576018287';
 
@@ -36,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         vodka: '❄️ Рюмка для водки (6шт)'
     };
 
+    // Функция загрузки изображения бокала
     function loadGlass(glassType) {
         state.glassType = glassType;
         fabric.Image.fromURL(`images/${glassType}-glass.png`, function(img) {
@@ -69,11 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { crossOrigin: 'anonymous' });
     }
 
+    // Функция загрузки дизайна
     function loadDesignContent(design) {
         state.design = design;
         state.designLoaded = true;
         designCanvas.clear();
 
+        // Рассчитываем масштаб для элементов
         const scale = Math.min(
             designCanvas.width * PADDING_FACTOR / design.canvasWidth,
             designCanvas.height * PADDING_FACTOR / design.canvasHeight
@@ -84,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const previewCenterX = designCanvas.width / 2;
         const previewCenterY = designCanvas.height / 2;
 
+        // Загрузка шаблона (если есть)
         if (design.template) {
             fabric.Image.fromURL(`images/templates/${design.template}`, function(img) {
                 const templateScale = Math.min(
@@ -109,7 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Функция загрузки элементов дизайна
     function loadDesignElements(design, scale, designCenterX, designCenterY, previewCenterX, previewCenterY) {
+        // Загрузка текстов
         if (design.texts && design.texts.length > 0) {
             design.texts.forEach(textObj => {
                 const offsetX = (textObj.left - designCenterX) * scale;
@@ -119,8 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     left: previewCenterX + offsetX,
                     top: previewCenterY + offsetY,
                     width: textObj.width * scale,
-                    originX: 'center',
-                    originY: 'center',
+                    originX: textObj.originX || 'center',
+                    originY: textObj.originY || 'center',
                     fontFamily: textObj.fontFamily,
                     fontSize: textObj.fontSize * scale,
                     fill: textObj.fill,
@@ -135,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        // Загрузка клипартов
         if (design.cliparts && design.cliparts.length > 0) {
             design.cliparts.forEach(clipartObj => {
                 fabric.Image.fromURL(`images/cliparts/${clipartObj.name}`, function(img) {
@@ -146,8 +156,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         scaleY: clipartObj.scaleY * scale,
                         left: previewCenterX + offsetX,
                         top: previewCenterY + offsetY,
-                        originX: 'center',
-                        originY: 'center',
+                        originX: clipartObj.originX || 'center',
+                        originY: clipartObj.originY || 'center',
                         angle: clipartObj.angle || 0,
                         flipX: clipartObj.flipX || false,
                         flipY: clipartObj.flipY || false,
@@ -160,10 +170,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Настройка размеров canvas
     function setupCanvasSizes() {
         const glassContainer = document.querySelector('#glass-preview').parentElement;
         const designContainer = document.querySelector('#design-preview').parentElement;
 
+        // Увеличиваем размеры окон
         glassContainer.style.height = '550px';
         designContainer.style.height = '550px';
 
@@ -201,22 +213,24 @@ document.addEventListener('DOMContentLoaded', function() {
                `🛒 *Детали заказа*:\n` +
                `- Бокал: ${glassTypeNames[formData.design?.glassType] || 'Не указан'}\n`;
 
-        if (formData.design?.template) {
-            message += `- Шаблон: ${formData.design.template.replace('.png', '')}\n`;
-        }
-
-        if (formData.design?.texts && formData.design.texts.length > 0) {
-            message += `\n📝 *Тексты*:\n`;
+        // Добавляем информацию о текстах
+        if (formData.design?.texts?.length > 0) {
             formData.design.texts.forEach((text, index) => {
-                message += `${index + 1}. "${text.text}" (Шрифт: ${text.fontFamily})\n`;
+                message += `- Текст ${index + 1}: "${text.text}" (Шрифт: ${text.fontFamily})\n`;
             });
+        } else {
+            message += `- Тексты: Нет\n`;
         }
 
-        if (formData.design?.cliparts && formData.design.cliparts.length > 0) {
-            message += `\n🎨 *Элементы дизайна*:\n`;
-            formData.design.cliparts.forEach((clipart, index) => {
-                message += `${index + 1}. ${clipart.displayName || clipart.name.replace('.png', '')}\n`;
-            });
+        // Добавляем информацию о элементах
+        message += `- Элементы: ${formData.design?.cliparts?.length || 0}\n`;
+
+        // Добавляем информацию о шаблоне
+        if (formData.design?.template) {
+            const templateNumber = formData.design.template.replace('template', '').replace('.png', '');
+            message += `- Шаблон: №${templateNumber}\n`;
+        } else {
+            message += `- Шаблон: Нет\n`;
         }
 
         message += `\n⏰ *Дата*: ${formData.date}`;
@@ -224,94 +238,50 @@ document.addEventListener('DOMContentLoaded', function() {
         return message;
     }
 
-    function sendDesignImageToTelegram() {
-        return new Promise((resolve, reject) => {
-            const dataURL = designCanvas.toDataURL({
-                format: 'png',
-                quality: 0.8
-            });
+    async function sendToTelegram(message, imageUrl = null) {
+        let url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
 
-            const blob = dataURLtoBlob(dataURL);
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'design.png');
-            formData.append('caption', 'Дизайн бокала');
+        // Если есть изображение, отправляем его вместе с сообщением
+        if (imageUrl) {
+            url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=${encodeURIComponent(imageUrl)}&caption=${encodeURIComponent(message)}&parse_mode=Markdown`;
+        }
 
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    resolve();
-                } else {
-                    console.error('Ошибка отправки изображения:', data);
-                    reject(new Error('Ошибка отправки изображения'));
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка отправки изображения:', error);
-                reject(error);
-            });
+        try {
+            await fetch(url);
+        } catch (error) {
+            console.error('Ошибка при отправке в Telegram:', error);
+        }
+    }
+
+    function getDesignPreviewImage() {
+        return new Promise((resolve) => {
+            // Создаем временный canvas, который объединит бокал и дизайн
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = designCanvas.width;
+            tempCanvas.height = designCanvas.height;
+            const ctx = tempCanvas.getContext('2d');
+
+            // Заливаем прозрачный фон белым
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+            // Рисуем дизайн
+            designCanvas.renderAll();
+            ctx.drawImage(designCanvas.getElement(), 0, 0);
+
+            // Получаем данные изображения
+            const imageData = tempCanvas.toDataURL('image/png');
+            resolve(imageData);
         });
     }
 
-    function dataURLtoBlob(dataURL) {
-        const arr = dataURL.split(',');
-        const mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-
-        while(n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-
-        return new Blob([u8arr], {type: mime});
-    }
-
-    function sendToTelegram(message) {
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
-
-        return fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.ok) {
-                    console.error('Ошибка отправки сообщения:', data);
-                    throw new Error(data.description || 'Ошибка отправки сообщения');
-                }
-                return data;
-            });
-    }
-
-    function showNotification(message, type = 'success') {
-        const notification = document.getElementById('notification');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
-        notification.style.display = 'block';
-
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 10);
-
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 300);
-        }, 5000);
-    }
-
     const form = document.getElementById('order-form');
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
-
         submitBtn.disabled = true;
-        submitBtn.querySelector('.btn-text').textContent = 'Отправка...';
-        submitBtn.querySelector('.spinner').style.display = 'inline-block';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
 
         const formData = {
             name: form.elements.name.value.trim(),
@@ -324,41 +294,34 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         if (!formData.name || !formData.phone || !formData.social) {
-            showNotification('Заполните обязательные поля: имя, телефон и соцсеть', 'error');
+            alert('Заполните обязательные поля: имя, телефон и соцсеть');
             submitBtn.disabled = false;
-            submitBtn.querySelector('.btn-text').textContent = 'Подтвердить заказ';
-            submitBtn.querySelector('.spinner').style.display = 'none';
+            submitBtn.innerHTML = originalBtnText;
             return;
         }
 
         const message = createTelegramMessage(formData);
 
-        // Сначала отправляем сообщение с текстом
-        sendToTelegram(message)
-            .then(() => {
-                // Затем отправляем изображение
-                return sendDesignImageToTelegram();
-            })
-            .then(() => {
-                showNotification('✅ Заказ отправлен! Мы свяжемся с вами.');
-                form.reset();
-                localStorage.removeItem('glassDesign');
-                // Очищаем canvas после успешной отправки
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
-            })
-            .catch(error => {
-                console.error('Ошибка отправки:', error);
-                showNotification('❌ Ошибка отправки заказа. Пожалуйста, попробуйте еще раз.', 'error');
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.querySelector('.btn-text').textContent = 'Подтвердить заказ';
-                submitBtn.querySelector('.spinner').style.display = 'none';
-            });
+        try {
+            // Получаем изображение дизайна
+            const designImage = await getDesignPreviewImage();
+
+            // Отправляем сообщение с изображением
+            await sendToTelegram(message, designImage);
+
+            alert('✅ Заказ отправлен! Мы свяжемся с вами.');
+            form.reset();
+            localStorage.removeItem('glassDesign');
+        } catch (error) {
+            console.error('Ошибка при отправке заказа:', error);
+            alert('⚠️ Произошла ошибка при отправке заказа. Пожалуйста, попробуйте еще раз.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
     });
 
+    // Инициализация
     window.addEventListener('load', function() {
         setupCanvasSizes();
         loadSavedDesign();
