@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
     flipX: false,
     flipY: false,
     isMobile: window.matchMedia("(max-width: 768px)").matches,
-    baseScale: 1.0
+    baseScale: 1.0,
+    designSaved: false,
+    designModified: false
   };
 
   const elements = {
@@ -49,7 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
     flipVerticalBtn: document.getElementById('flip-vertical-btn'),
     rotateLeftBtn: document.getElementById('rotate-left-btn'),
     rotateRightBtn: document.getElementById('rotate-right-btn'),
-    saveDesignBtn: document.getElementById('save-design')
+    saveDesignBtn: document.getElementById('save-design'),
+    orderBtn: document.querySelector('a[href="order.html"]')
   };
 
   fabric.Object.prototype.set({
@@ -93,6 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function loadGlass(glassType) {
     state.glassType = glassType;
+    state.designModified = true;
+    state.designSaved = false;
     fabric.Image.fromURL(`images/${glassType}-glass.png`, function(img) {
       if (state.backgroundImage) {
         canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
@@ -144,9 +149,11 @@ document.addEventListener('DOMContentLoaded', function() {
       state.template = null;
     }
 
-
-    
     if (templateName !== 'none') {
+      state.designModified = true;
+      state.designSaved = false;
+      state.currentTemplate = templateName;
+
       fabric.Image.fromURL(`images/templates/${templateName}`, function(img) {
         const scale = Math.min(
           canvas.width * 0.7 / img.width,
@@ -176,7 +183,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         state.template = img;
-        state.currentTemplate = templateName;
         canvas.add(img);
         canvas.setActiveObject(img);
         canvas.renderAll();
@@ -189,6 +195,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function addNewText() {
+    state.designModified = true;
+    state.designSaved = false;
+
     const textId = state.nextId++;
     const textObj = {
       id: textId,
@@ -237,6 +246,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateText() {
     if (!state.activeTextId) return;
 
+    state.designModified = true;
+    state.designSaved = false;
+
     const text = elements.engravingText.value.substring(0, 100);
     elements.engravingText.value = text;
 
@@ -262,6 +274,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function removeText(textId) {
+    state.designModified = true;
+    state.designSaved = false;
+
     const textIndex = state.texts.findIndex(t => t.id === textId);
     if (textIndex === -1) return;
 
@@ -336,8 +351,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function addClipart(clipartName) {
+    state.designModified = true;
+    state.designSaved = false;
+
     const card = document.querySelector(`.option-card[data-clipart="${clipartName}"]`);
-    const clipartDisplayName = card ? card.dataset.name || clipartName.replace('.png', '') : clipartName.replace('.png', '');
+    const clipartDisplayName = card ? card.querySelector('p').textContent : clipartName.replace('.png', '');
 
     fabric.Image.fromURL(`images/cliparts/${clipartName}`, function(img) {
       const scale = Math.min(
@@ -431,6 +449,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function flipObject(axis) {
+    state.designModified = true;
+    state.designSaved = false;
+
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
       if (axis === 'horizontal') {
@@ -444,6 +465,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function rotateObject(angle) {
+    state.designModified = true;
+    state.designSaved = false;
+
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
       activeObject.angle = (activeObject.angle || 0) + angle;
@@ -473,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         notification.remove();
       }, 300);
-    }, 3000);
+    }, 5000);
   }
 
   function saveDesign() {
@@ -516,7 +540,9 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     localStorage.setItem('glassDesign', JSON.stringify(designData));
-    showNotification('Дизайн сохранен! Теперь вы можете перейти к оформлению заказа.');
+    state.designSaved = true;
+    state.designModified = false;
+    showNotification('Дизайн сохранен! Теперь вы можете перейти к оформлению заказа📦.');
   }
 
   function loadDesign() {
@@ -525,6 +551,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const design = JSON.parse(savedDesign);
       state.glassType = design.glassType;
       state.zoom = design.zoom || (state.isMobile ? 0.8 : 0.5);
+      state.designSaved = true;
+      state.designModified = false;
 
       if (state.isMobile) {
         elements.zoomSlider.min = 60;
@@ -623,6 +651,16 @@ document.addEventListener('DOMContentLoaded', function() {
       updateTextList();
       updateLayersList();
     }
+  }
+
+  function checkDesignBeforeOrder(e) {
+    if (!state.designSaved || state.designModified) {
+      e.preventDefault();
+      showNotification('Пожалуйста, сохраните дизайн перед оформлением заказа', 'error');
+      document.querySelector('.tab-btn[data-tab="glass-tab"]').click();
+      return false;
+    }
+    return true;
   }
 
   function setupEventListeners() {
@@ -747,6 +785,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     elements.saveDesignBtn?.addEventListener('click', saveDesign);
 
+    elements.orderBtn?.addEventListener('click', checkDesignBeforeOrder);
+
     elements.zoomSlider?.addEventListener('input', function() {
       state.zoom = parseFloat(this.value) / 100;
       updateZoom();
@@ -770,14 +810,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     canvas.on('object:modified', function() {
+      state.designModified = true;
+      state.designSaved = false;
       updateLayersList();
     });
 
     canvas.on('object:added', function() {
+      state.designModified = true;
+      state.designSaved = false;
       updateLayersList();
     });
 
     canvas.on('object:removed', function() {
+      state.designModified = true;
+      state.designSaved = false;
       updateLayersList();
     });
   }
