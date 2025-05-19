@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
       state.template = null;
     }
 
+
+    
     if (templateName !== 'none') {
       fabric.Image.fromURL(`images/templates/${templateName}`, function(img) {
         const scale = Math.min(
@@ -212,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
       selectable: true,
       hasControls: true,
       splitByGrapheme: true,
-      data: { id: textId, type: 'text', fontFamily: textObj.fontFamily },
+      data: { id: textId, type: 'text' },
       cornerStyle: 'circle',
       cornerColor: '#6a5acd',
       cornerSize: 12,
@@ -490,8 +492,7 @@ document.addEventListener('DOMContentLoaded', function() {
           top: t.fabricObj.top,
           width: t.fabricObj.width,
           originX: t.fabricObj.originX,
-          originY: t.fabricObj.originY,
-          fontFamily: t.fabricObj.fontFamily
+          originY: t.fabricObj.originY
         })),
       template: activeObjects.some(obj => obj.data?.type === 'template') ? state.currentTemplate : null,
       cliparts: activeObjects
@@ -558,20 +559,20 @@ document.addEventListener('DOMContentLoaded', function() {
             fontSize: textObj.fontSize * scale,
             fill: textObj.fill,
             textAlign: textObj.textAlign,
-            angle: textObj.angle || 0,
-            flipX: textObj.flipX || false,
-            flipY: textObj.flipY || false,
             selectable: true,
             hasControls: true,
             splitByGrapheme: true,
-            data: { id: textId, type: 'text', fontFamily: textObj.fontFamily },
+            data: { id: textId, type: 'text' },
             cornerStyle: 'circle',
             cornerColor: '#6a5acd',
             cornerSize: 12,
             transparentCorners: false,
             borderColor: '#6a5acd',
             borderScaleFactor: 2,
-            padding: 10
+            padding: 10,
+            angle: textObj.angle || 0,
+            flipX: textObj.flipX || false,
+            flipY: textObj.flipY || false
           });
 
           state.texts.push({ id: textId, fabricObj: fabricText, data: textObj });
@@ -585,17 +586,36 @@ document.addEventListener('DOMContentLoaded', function() {
             img.set({
               scaleX: clipartObj.scaleX * scale,
               scaleY: clipartObj.scaleY * scale,
-              left: previewCenterX + offsetX,
-              top: previewCenterY + offsetY,
+              left: clipartObj.left * scale,
+              top: clipartObj.top * scale,
               originX: clipartObj.originX || 'center',
               originY: clipartObj.originY || 'center',
+              selectable: true,
+              hasControls: true,
+              hasBorders: true,
+              lockRotation: false,
+              lockUniScaling: false,
+              cornerStyle: 'circle',
+              cornerColor: '#6a5acd',
+              cornerSize: 12,
+              transparentCorners: false,
+              borderColor: '#6a5acd',
+              borderScaleFactor: 2,
+              padding: 10,
+              data: {
+                type: 'clipart',
+                name: clipartObj.name,
+                displayName: clipartObj.displayName
+              },
               angle: clipartObj.angle || 0,
               flipX: clipartObj.flipX || false,
-              flipY: clipartObj.flipY || false,
-              selectable: false,
-              evented: false
+              flipY: clipartObj.flipY || false
             });
-            designCanvas.add(img);
+
+            canvas.add(img);
+            state.cliparts.push(img);
+            canvas.renderAll();
+            updateLayersList();
           }, { crossOrigin: 'anonymous' });
         });
       }
