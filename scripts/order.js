@@ -191,6 +191,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function setupFormValidation() {
+    const socialInput = document.getElementById('social');
+
+    socialInput.addEventListener('input', function() {
+        // Разрешаем только английские буквы, цифры, @, _, . и -
+        this.value = this.value.replace(/[^a-zA-Z0-9@_\.\-]/g, '');
+    });
+
+    socialInput.addEventListener('blur', function() {
+        // Удаляем возможные оставшиеся недопустимые символы
+        this.value = this.value.replace(/[^a-zA-Z0-9@_\.\-]/g, '');
+    });
+}
+
+// Добавьте вызов функции в init или в DOMContentLoaded:
+setupFormValidation();
+
     function createTelegramMessage(formData) {
         let message = `📦 *Новый заказ* \n\n` +
                `👤 *Имя*: ${formData.name}\n` +
@@ -227,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return new Promise((resolve) => {
             const tempCanvas = document.createElement('canvas');
             const padding = 40;
-            
+
             const allObjects = designCanvas.getObjects();
             if (allObjects.length === 0) {
                 resolve(null);
@@ -329,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const message = createTelegramMessage(formData);
             const designImage = await getDesignPreviewImage();
             await sendToTelegram(message, designImage);
-            
+
             alert('✅ Заказ отправлен! Мы свяжемся с вами.');
             form.reset();
             localStorage.removeItem('glassDesign');
