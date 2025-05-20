@@ -119,8 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     left: previewCenterX + offsetX,
                     top: previewCenterY + offsetY,
                     width: textObj.width * scale,
-                    originX: textObj.originX || 'center',
-                    originY: textObj.originY || 'center',
+                    originX: 'center',
+                    originY: 'center',
                     fontFamily: textObj.fontFamily,
                     fontSize: textObj.fontSize * scale,
                     fill: textObj.fill,
@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         scaleY: clipartObj.scaleY * scale,
                         left: previewCenterX + offsetX,
                         top: previewCenterY + offsetY,
-                        originX: clipartObj.originX || 'center',
-                        originY: clipartObj.originY || 'center',
+                        originX: 'center',
+                        originY: 'center',
                         angle: clipartObj.angle || 0,
                         flipX: clipartObj.flipX || false,
                         flipY: clipartObj.flipY || false,
@@ -191,23 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function setupFormValidation() {
-    const socialInput = document.getElementById('social');
-
-    socialInput.addEventListener('input', function() {
-        // Разрешаем только английские буквы, цифры, @, _, . и -
-        this.value = this.value.replace(/[^a-zA-Z0-9@_\.\-]/g, '');
-    });
-
-    socialInput.addEventListener('blur', function() {
-        // Удаляем возможные оставшиеся недопустимые символы
-        this.value = this.value.replace(/[^a-zA-Z0-9@_\.\-]/g, '');
-    });
-}
-
-// Добавьте вызов функции в init или в DOMContentLoaded:
-setupFormValidation();
-
     function createTelegramMessage(formData) {
         let message = `📦 *Новый заказ* \n\n` +
                `👤 *Имя*: ${formData.name}\n` +
@@ -218,21 +201,22 @@ setupFormValidation();
                `🛒 *Детали заказа*:\n` +
                `- Бокал: ${glassTypeNames[formData.design?.glassType] || 'Не указан'}\n`;
 
-        if (formData.design?.texts?.length > 0) {
-            formData.design.texts.forEach((text, index) => {
-                message += `- Текст ${index + 1}: "${text.text}" (Шрифт: ${text.fontFamily})\n`;
-            });
-        } else {
-            message += `- Тексты: Нет\n`;
+        if (formData.design?.template) {
+            message += `- Шаблон: ${formData.design.template.replace('.png', '')}\n`;
         }
 
-        message += `- Элементы: ${formData.design?.cliparts?.length || 0}\n`;
+        if (formData.design?.texts && formData.design.texts.length > 0) {
+            message += `\n📝 *Тексты*:\n`;
+            formData.design.texts.forEach((text, index) => {
+                message += `${index + 1}. "${text.text}" (Шрифт: ${text.fontFamily})\n`;
+            });
+        }
 
-        if (formData.design?.template) {
-            const templateNumber = formData.design.template.replace('template', '').replace('.png', '');
-            message += `- Шаблон: №${templateNumber}\n`;
-        } else {
-            message += `- Шаблон: Нет\n`;
+        if (formData.design?.cliparts && formData.design.cliparts.length > 0) {
+            message += `\n🎨 *Элементы дизайна*:\n`;
+            formData.design.cliparts.forEach((clipart, index) => {
+                message += `${index + 1}. ${clipart.displayName || clipart.name.replace('.png', '')}\n`;
+            });
         }
 
         message += `\n⏰ *Дата*: ${formData.date}`;
@@ -240,90 +224,79 @@ setupFormValidation();
         return message;
     }
 
-    function getDesignPreviewImage() {
-        return new Promise((resolve) => {
-            const tempCanvas = document.createElement('canvas');
-            const padding = 40;
-
-            const allObjects = designCanvas.getObjects();
-            if (allObjects.length === 0) {
-                resolve(null);
-                return;
-            }
-
-            const group = new fabric.Group(allObjects, {
-                originX: 'center',
-                originY: 'center'
+    function sendOrderToTelegram(formData) {
+        return new Promise((resolve, reject) => {
+            const dataURL = designCanvas.toDataURL({
+                format: 'png',
+                quality: 0.8
             });
 
-            const groupBoundingRect = group.getBoundingRect();
-            const scale = Math.min(
-                (designCanvas.width - padding * 2) / groupBoundingRect.width,
-                (designCanvas.height - padding * 2) / groupBoundingRect.height
-            );
+            const blob = dataURLtoBlob(dataURL);
+            const formDataToSend = new FormData();
+            formDataToSend.append('chat_id', CHAT_ID);
+            formDataToSend.append('photo', blob, 'design.png');
+            formDataToSend.append('caption', createTelegramMessage(formData));
+            formDataToSend.append('parse_mode', 'Markdown');
 
-            tempCanvas.width = designCanvas.width;
-            tempCanvas.height = designCanvas.height;
-            const ctx = tempCanvas.getContext('2d');
-
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
-            group.set({
-                scaleX: scale,
-                scaleY: scale,
-                left: tempCanvas.width / 2,
-                top: tempCanvas.height / 2,
-                originX: 'center',
-                originY: 'center'
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                method: 'POST',
+                body: formDataToSend
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    resolve();
+                } else {
+                    reject(new Error('Ошибка отправки заказа'));
+                }
+            })
+            .catch(error => {
+                reject(error);
             });
-
-            const tempFabricCanvas = new fabric.StaticCanvas(tempCanvas);
-            tempFabricCanvas.add(group);
-            tempFabricCanvas.renderAll();
-
-            resolve(tempCanvas.toDataURL('image/png'));
         });
     }
 
-    async function sendToTelegram(message, imageUrl = null) {
-        try {
-            if (imageUrl) {
-                const blob = await fetch(imageUrl).then(r => r.blob());
-                const formData = new FormData();
-                formData.append('photo', blob, 'design.png');
-                formData.append('chat_id', CHAT_ID);
-                formData.append('caption', message);
-                formData.append('parse_mode', 'Markdown');
+    function dataURLtoBlob(dataURL) {
+        const arr = dataURL.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
 
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
-            } else {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
-                document.body.appendChild(iframe);
-                setTimeout(() => iframe.remove(), 3000);
-            }
-        } catch (error) {
-            console.error('Ошибка при отправке в Telegram:', error);
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent("Новый заказ (изображение не загружено)\n\n" + message)}&parse_mode=Markdown`;
-            document.body.appendChild(iframe);
-            setTimeout(() => iframe.remove(), 3000);
+        while(n--) {
+            u8arr[n] = bstr.charCodeAt(n);
         }
+
+        return new Blob([u8arr], {type: mime});
+    }
+
+    function showNotification(message, type = 'success') {
+        const notification = document.getElementById('notification');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+        notification.style.display = 'block';
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 300);
+        }, 5000);
     }
 
     const form = document.getElementById('order-form');
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
+
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+        submitBtn.querySelector('.btn-text').textContent = 'Отправка...';
+        submitBtn.querySelector('.spinner').style.display = 'inline-block';
 
         const formData = {
             name: form.elements.name.value.trim(),
@@ -336,28 +309,52 @@ setupFormValidation();
         };
 
         if (!formData.name || !formData.phone || !formData.social) {
-            alert('Заполните обязательные поля: имя, телефон и соцсеть');
+            showNotification('Заполните обязательные поля: имя, телефон и соцсеть', 'error');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
+            submitBtn.querySelector('.btn-text').textContent = 'Подтвердить заказ';
+            submitBtn.querySelector('.spinner').style.display = 'none';
             return;
         }
 
-        try {
-            const message = createTelegramMessage(formData);
-            const designImage = await getDesignPreviewImage();
-            await sendToTelegram(message, designImage);
+        sendOrderToTelegram(formData)
+            .then(() => {
+                showNotification('✅ Заказ отправлен! Мы свяжемся с вами.');
+                form.reset();
+                localStorage.removeItem('glassDesign');
+            })
+            .catch(error => {
+                console.error('Ошибка отправки:', error);
+                showNotification('❌ Ошибка отправки заказа. Пожалуйста, попробуйте еще раз.', 'error');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('.btn-text').textContent = 'Подтвердить заказ';
+                submitBtn.querySelector('.spinner').style.display = 'none';
+            });
+    });
 
-            alert('✅ Заказ отправлен! Мы свяжемся с вами.');
-            form.reset();
-            localStorage.removeItem('glassDesign');
-        } catch (error) {
-            console.error('Ошибка при отправке заказа:', error);
-            alert('⚠️ Произошла ошибка при отправке заказа. Пожалуйста, попробуйте еще раз.');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, '');
+
+        if (value.startsWith('373')) {
+            value = value.substring(3);
+        }
+
+        if (value.length > 8) {
+            value = value.substring(0, 8);
+        }
+
+        this.value = '+373 ' + value;
+
+        if (value.length === 8) {
+            this.setCustomValidity('');
+        } else {
+            this.setCustomValidity('Номер телефона должен содержать 8 цифр');
         }
     });
+
+    phoneInput.value = '+373 ';
 
     window.addEventListener('load', function() {
         setupCanvasSizes();
