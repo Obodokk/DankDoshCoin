@@ -1,3 +1,10 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Mon Amour One';
   src: url('../fonts/mon_amour_one_medium.woff2') format('woff2');
@@ -134,8 +141,6 @@
 }
 
 
-body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-}
+
+
+
