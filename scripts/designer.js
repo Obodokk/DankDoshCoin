@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
     flipX: false,
     flipY: false,
     isMobile: window.matchMedia("(max-width: 768px)").matches,
-    baseScale: 1.0
+    baseScale: 1.0,
+    isDesignSaved: false,
+    hasUnsavedChanges: false
   };
 
   const elements = {
@@ -49,7 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
     flipVerticalBtn: document.getElementById('flip-vertical-btn'),
     rotateLeftBtn: document.getElementById('rotate-left-btn'),
     rotateRightBtn: document.getElementById('rotate-right-btn'),
-    saveDesignBtn: document.getElementById('save-design')
+    saveDesignBtn: document.getElementById('save-design'),
+    orderBtn: document.getElementById('order-btn')
   };
 
   fabric.Object.prototype.set({
@@ -519,6 +522,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     localStorage.setItem('glassDesign', JSON.stringify(designData));
+    state.isDesignSaved = true;
+    state.hasUnsavedChanges = false;
     showNotification('Дизайн сохранен! Теперь вы можете перейти к оформлению заказа.');
   }
 
@@ -623,6 +628,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
 
+      state.isDesignSaved = true;
+      state.hasUnsavedChanges = false;
       updateTextList();
       updateLayersList();
     }
@@ -750,6 +757,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     elements.saveDesignBtn?.addEventListener('click', saveDesign);
 
+    elements.orderBtn?.addEventListener('click', function(e) {
+      if (!state.isDesignSaved || state.hasUnsavedChanges) {
+        e.preventDefault();
+        showNotification('Пожалуйста, сохраните дизайн перед оформлением заказа', 'error');
+        return;
+      }
+    });
+
     elements.zoomSlider?.addEventListener('input', function() {
       state.zoom = parseFloat(this.value) / 100;
       updateZoom();
@@ -773,14 +788,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     canvas.on('object:modified', function() {
+      if (state.isDesignSaved) {
+        state.hasUnsavedChanges = true;
+        state.isDesignSaved = false;
+      }
       updateLayersList();
     });
 
     canvas.on('object:added', function() {
+      if (state.isDesignSaved) {
+        state.hasUnsavedChanges = true;
+        state.isDesignSaved = false;
+      }
       updateLayersList();
     });
 
     canvas.on('object:removed', function() {
+      if (state.isDesignSaved) {
+        state.hasUnsavedChanges = true;
+        state.isDesignSaved = false;
+      }
       updateLayersList();
     });
   }
