@@ -1003,7 +1003,7 @@ input:valid {
 }
 
 .phone-hint {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #666;
   margin-top: 5px;
 }
@@ -1776,7 +1776,7 @@ input.valid {
     border: none;
     border-radius: 20px;
     padding: 8px 12px;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.2s;
     color: var(--dark);
