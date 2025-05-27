@@ -326,4 +326,4 @@ function initializeChatbot() {
         
         return responses[type] || responses["default"];
     }
-});
+}
