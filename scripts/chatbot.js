@@ -234,7 +234,7 @@ function initializeChatbot() {
             "что делать, если бокал разбился": "guarantee",
             "разбился бокал": "guarantee",
             "повредилась коробка": "guarantee",
-            "вернете деньги": "guarantee"
+            "вернете деньги": "guarantee",
 
             "Сколько уйдет времени на изготовление бокалов": "manufacturing",
             "Сроки изготовления": "manufacturing",
