@@ -35,10 +35,7 @@ function initializeChatbot() {
     chatBody.innerHTML = `
         <div class="chatbot-welcome">
             <div class="chatbot-message bot-message">
-                Привет! Я виртуальный помощник wine.not.pmr. Чем могу помочь?
-            </div>
-            <div class="chatbot-message bot-message">
-                Выберите один из вариантов ниже или задайте свой вопрос:
+                Привет! Чем могу помочь?
             </div>
         </div>
         <div id="chatbot-messages" class="chatbot-messages"></div>
