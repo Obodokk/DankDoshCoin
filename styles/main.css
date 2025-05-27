@@ -1878,3 +1878,38 @@ input.valid {
         font-size: 1.2rem;
     }
 }
+/* Стили для сворачивающегося меню */
+.quick-questions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    background: #f5f5f5;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.quick-questions-toggle {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 5px;
+}
+
+.quick-questions-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.quick-questions-content.collapsed {
+    display: none;
+}
