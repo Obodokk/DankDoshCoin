@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Проверяем, был ли уже показан чат
     if (sessionStorage.getItem('chatbotShown')) {
         initializeChatbot();
         return;
     }
 
-    // Устанавливаем таймер на 10 секунд для первого показа
     setTimeout(function() {
         sessionStorage.setItem('chatbotShown', 'true');
         initializeChatbot();
@@ -13,12 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeChatbot() {
-    // Создаем контейнер для чата
     const chatContainer = document.createElement('div');
     chatContainer.id = 'chatbot-container';
     chatContainer.className = 'chatbot-hidden';
-
-    // Создаем заголовок чата
+    
     const chatHeader = document.createElement('div');
     chatHeader.className = 'chatbot-header';
     chatHeader.innerHTML = `
@@ -26,36 +22,47 @@ function initializeChatbot() {
             <i class="fas fa-wine-glass-alt"></i>
             <span>Помощник wine.not.pmr</span>
         </div>
+        <button id="chatbot-clear" class="chatbot-clear-btn" title="Очистить историю">
+            <i class="fas fa-trash-alt"></i>
+        </button>
         <button id="chatbot-close" class="chatbot-close-btn">
             <i class="fas fa-times"></i>
         </button>
     `;
-
-    // Создаем тело чата
+    
     const chatBody = document.createElement('div');
     chatBody.className = 'chatbot-body';
     chatBody.innerHTML = `
         <div class="chatbot-welcome">
             <div class="chatbot-message bot-message">
-                Привет! Чем могу помочь?
+                Привет! Я виртуальный помощник wine.not.pmr. Чем могу помочь?
+            </div>
+            <div class="chatbot-message bot-message">
+                Выберите один из вариантов ниже или задайте свой вопрос:
             </div>
         </div>
         <div id="chatbot-messages" class="chatbot-messages"></div>
     `;
-
-    // Создаем быстрые кнопки
+    
     const quickButtons = document.createElement('div');
     quickButtons.className = 'chatbot-quick-buttons';
     quickButtons.innerHTML = `
-        <button class="chatbot-quick-btn" data-question="Как сделать заказ?">Как сделать заказ?</button>
-        <button class="chatbot-quick-btn" data-question="Какие виды бокалов есть?">Виды бокалов</button>
-        <button class="chatbot-quick-btn" data-question="Сроки доставки">Сроки доставки</button>
-        <button class="chatbot-quick-btn" data-question="Сроки изготовления">Сроки изготовления</button>
-        <button class="chatbot-quick-btn" data-question="Цены на гравировку">Цены на бокалы</button>
-        <button class="chatbot-quick-btn" data-question="Подарочные упаковок">Виды упаковок</button>
+        <div class="quick-questions-header">
+            <span>Быстрые вопросы</span>
+            <button id="quick-questions-toggle" class="quick-questions-toggle">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        <div id="quick-questions-content" class="quick-questions-content">
+            <button class="chatbot-quick-btn" data-question="Как сделать заказ?">Как сделать заказ?</button>
+            <button class="chatbot-quick-btn" data-question="Какие виды бокалов есть?">Виды бокалов</button>
+            <button class="chatbot-quick-btn" data-question="Сроки доставки">Сроки доставки</button>
+            <button class="chatbot-quick-btn" data-question="Цены на гравировку">Цены</button>
+            <button class="chatbot-quick-btn" data-question="Сколько уйдет времени на изготовление бокалов?">Сроки изготовления</button>
+            <button class="chatbot-quick-btn" data-question="Какие есть варианты упаковки?">Варианты упаковки</button>
+        </div>
     `;
-
-    // Создаем поле ввода
+    
     const chatInput = document.createElement('div');
     chatInput.className = 'chatbot-input';
     chatInput.innerHTML = `
@@ -64,38 +71,40 @@ function initializeChatbot() {
             <i class="fas fa-paper-plane"></i>
         </button>
     `;
-
-    // Собираем все вместе
+    
     chatContainer.appendChild(chatHeader);
     chatContainer.appendChild(chatBody);
     chatContainer.appendChild(quickButtons);
     chatContainer.appendChild(chatInput);
-
-    // Добавляем чат на страницу
+    
     document.body.appendChild(chatContainer);
-
-    // Создаем кнопку для открытия чата
+    
     const chatToggle = document.createElement('div');
     chatToggle.id = 'chatbot-toggle';
     chatToggle.className = 'chatbot-toggle';
     chatToggle.innerHTML = '<i class="fas fa-comment-dots"></i>';
     document.body.appendChild(chatToggle);
-
-    // Показываем чат через небольшой таймер для анимации
+    
     setTimeout(() => {
         chatContainer.classList.remove('chatbot-hidden');
         chatContainer.classList.add('chatbot-visible');
     }, 100);
-
-    // Обработчики событий
+    
     document.getElementById('chatbot-close').addEventListener('click', toggleChat);
     document.getElementById('chatbot-toggle').addEventListener('click', toggleChat);
     document.getElementById('chatbot-send-btn').addEventListener('click', sendMessage);
     document.getElementById('chatbot-user-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') sendMessage();
     });
-
-    // Обработчики для быстрых кнопок
+    
+    document.getElementById('quick-questions-toggle').addEventListener('click', function() {
+        const content = document.getElementById('quick-questions-content');
+        const icon = this.querySelector('i');
+        content.classList.toggle('collapsed');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+    });
+    
     document.querySelectorAll('.chatbot-quick-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const question = this.getAttribute('data-question');
@@ -105,8 +114,29 @@ function initializeChatbot() {
             }, 500);
         });
     });
-
-    // Функция переключения видимости чата
+    
+    document.getElementById('chatbot-clear').addEventListener('click', function() {
+        sessionStorage.setItem('chatHistory', JSON.stringify([]));
+        document.getElementById('chatbot-messages').innerHTML = '';
+        document.querySelector('.chatbot-welcome').style.display = 'block';
+    });
+    
+    if (!sessionStorage.getItem('chatHistory')) {
+        sessionStorage.setItem('chatHistory', JSON.stringify([]));
+    }
+    
+    const chatHistory = JSON.parse(sessionStorage.getItem('chatHistory'));
+    if (chatHistory.length > 0) {
+        document.querySelector('.chatbot-welcome').style.display = 'none';
+        chatHistory.forEach(msg => {
+            if (msg.type === 'user') {
+                addUserMessage(msg.text, false);
+            } else {
+                addBotMessage(msg.text, false);
+            }
+        });
+    }
+    
     function toggleChat() {
         const isVisible = chatContainer.classList.contains('chatbot-visible');
         if (isVisible) {
@@ -119,55 +149,118 @@ function initializeChatbot() {
             chatToggle.style.display = 'none';
         }
     }
-
-    // Функция добавления сообщения пользователя
-    function addUserMessage(message) {
+    
+    function addUserMessage(message, saveToHistory = true) {
         const messagesContainer = document.getElementById('chatbot-messages');
+        document.querySelector('.chatbot-welcome').style.display = 'none';
         const messageElement = document.createElement('div');
         messageElement.className = 'chatbot-message user-message';
         messageElement.textContent = message;
         messagesContainer.appendChild(messageElement);
         scrollToBottom();
+        
+        if (saveToHistory) {
+            saveMessageToHistory(message, 'user');
+        }
     }
-
-    // Функция добавления сообщения бота
-    function addBotMessage(message) {
+    
+    function addBotMessage(message, saveToHistory = true) {
         const messagesContainer = document.getElementById('chatbot-messages');
         const messageElement = document.createElement('div');
         messageElement.className = 'chatbot-message bot-message';
         messageElement.innerHTML = message;
         messagesContainer.appendChild(messageElement);
         scrollToBottom();
+        
+        if (saveToHistory) {
+            saveMessageToHistory(message, 'bot');
+        }
     }
-
-    // Функция отправки сообщения
+    
     function sendMessage() {
         const input = document.getElementById('chatbot-user-input');
         const message = input.value.trim();
-
+        
         if (message) {
             addUserMessage(message);
             input.value = '';
-
+            
             setTimeout(() => {
                 generateBotResponse(message);
             }, 500);
         }
     }
-
-    // Функция прокрутки вниз
+    
     function scrollToBottom() {
         const messagesContainer = document.getElementById('chatbot-messages');
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
-
-    // Функция генерации ответа бота
+    
+    function saveMessageToHistory(message, type) {
+        const history = JSON.parse(sessionStorage.getItem('chatHistory'));
+        history.push({ text: message, type });
+        sessionStorage.setItem('chatHistory', JSON.stringify(history));
+    }
+    
     function generateBotResponse(question) {
-        let response = '';
+        const exactMatches = {
+            "сколько уйдет времени на изготовление бокалов": "manufacturing",
+            "сроки изготовления": "manufacturing",
+            "когда будет готов заказ": "manufacturing",
+            "как сделать заказ": "ordering",
+            "как оформить заказ": "ordering",
+            "какие виды бокалов есть": "types",
+            "какие бокалы у вас есть": "types",
+            "сроки доставки": "delivery",
+            "когда привезут заказ": "delivery",
+            "цены на гравировку": "prices",
+            "сколько стоит гравировка": "prices",
+            "какие есть варианты упаковки": "packaging",
+            "как упаковываете заказы": "packaging"
+        };
+        
+        if (exactMatches[question.toLowerCase()]) {
+            addBotMessage(getResponseByType(exactMatches[question.toLowerCase()]));
+            return;
+        }
+        
+        const keywords = [
+            { words: ["изготовлени", "сделают", "производств", "уйдет времени", "готов заказ"], type: "manufacturing", priority: 1 },
+            { words: ["заказ", "оформлени", "сделать заказ", "купить"], type: "ordering", priority: 1 },
+            { words: ["доставк", "привез", "получу", "придет"], type: "delivery", priority: 1 },
+            { words: ["цена", "стоимость", "сколько стоит", "ценник"], type: "prices", priority: 1 },
+            { words: ["упаковк", "коробк", "подар", "упаковываете"], type: "packaging", priority: 1 },
+            { words: ["бокал", "виды", "тип", "каталог"], type: "types", priority: 0 }
+        ];
+        
+        let bestMatch = { type: "default", score: 0 };
         const lowerQuestion = question.toLowerCase();
-
-        if (lowerQuestion.includes('заказ') || lowerQuestion.includes('оформлени')) {
-            response = `
+        
+        keywords.forEach(item => {
+            const score = item.words.reduce((total, word) => {
+                return total + (lowerQuestion.includes(word) ? item.priority : 0);
+            }, 0);
+            
+            if (score > bestMatch.score) {
+                bestMatch = { type: item.type, score };
+            }
+        });
+        
+        addBotMessage(getResponseByType(bestMatch.type));
+    }
+    
+    function getResponseByType(type) {
+        const responses = {
+            "manufacturing": `
+                <p>Сроки изготовления бокалов с гравировкой:</p>
+                <ul>
+                    <li>Стандартные заказы - 1-2 рабочих дня</li>
+                    <li>Сложные дизайны - до 3 рабочих дней</li>
+                    <li>Оптовые заказы (от 10 шт) - 3-5 рабочих дней</li>
+                </ul>
+                <p>Мы сообщим вам точную дату готовности после подтверждения заказа.</p>
+            `,
+            "ordering": `
                 <p>Чтобы сделать заказ:</p>
                 <ol>
                     <li>Выберите бокал в <a href="catalog.html">каталоге</a></li>
@@ -175,10 +268,8 @@ function initializeChatbot() {
                     <li>Оформите заказ на странице <a href="order.html">оформления</a></li>
                 </ol>
                 <p>Или вы можете сразу перейти в <a href="designer.html">конструктор</a> и начать создавать свой уникальный дизайн!</p>
-            `;
-        }
-        else if (lowerQuestion.includes('виды') || lowerQuestion.includes('бокал')) {
-            response = `
+            `,
+            "types": `
                 <p>У нас есть несколько видов бокалов:</p>
                 <ul>
                     <li>🍷 Винные бокалы (420 мл)</li>
@@ -189,10 +280,8 @@ function initializeChatbot() {
                     <li>❄️ Наборы рюмок для водки (6 шт по 50 мл)</li>
                 </ul>
                 <p>Посмотреть все варианты можно в <a href="catalog.html">каталоге</a>.</p>
-            `;
-        }
-        else if (lowerQuestion.includes('доставк') || lowerQuestion.includes('срок')) {
-            response = `
+            `,
+            "delivery": `
                 <p>Сроки доставки:</p>
                 <ul>
                     <li>По Тирасполю - 1-2 дня</li>
@@ -200,53 +289,20 @@ function initializeChatbot() {
                     <li>По Молдове - 3-5 дней</li>
                 </ul>
                 <p>Мы отправляем заказы в день изготовления!</p>
-            `;
-        }
-        else if (lowerQuestion.includes('изготовления') || lowerQuestion.includes('срок')) {
-            response = `
-                <p>Сроки изготовления:</p>
+            `,
+            "prices": `
+                <p>Стоимость зависит от типа бокала и сложности гравировки:</p>
                 <ul>
-                    <li>В среднем на изготовление заказов уходит 1-3 рабочих дня</li>
-                    <li>Сроки могут отличаться, все зависит от загруженности</li>
-                    <li>Сроки изготовления будут уточнены для вас после оформления заказа.</li>
-                </ul>
-                <p>По готовности вам напишут в вашу соц-сеть, которую вы указали при оформлении заказа, или позвонят по вашему номеру телефона</p>
-            `;
-        }
-        else if (lowerQuestion.includes('цен') || lowerQuestion.includes('стоимость')) {
-            response = `
-                <p>Стоимость бокалов:</p>
-                <ul>
-                    <li>Стоимость одного бокала - 200 руб</li>
-                    <li>При заказе 2х бокалов, скидка 50 руб - 350 руб</li>
-                    <li>В стоимоть входит подарочная упаковка (крафт)</li>
-                    <li>Стоимость бокала в деревянном боксе - 375 руб</li>
-                    <li>Стоимость 2х бокалов в деревянном боксе - 475 руб</li>
-                    <li>Стоимость одного бокала + место под бутылку - 475 руб</li>
-                    <li>Стоимость 2х бокалов + место под бутылку - 525 руб</li>
-                    <li>Наборы рюмок в деревянном боксе - 475 руб</li>
-                    <li>Можем изготовить любой бокс, под любое кол-во бокалов</li>
-                    <li>Уточните в лс в нашем <a href="https://www.instagram.com/wine.not.pmr/">instagram</a></li>
+                    <li>Винные бокалы - от 350 руб</li>
+                    <li>Пивные бокалы - от 400 руб</li>
+                    <li>Бокалы для виски - от 450 руб</li>
+                    <li>Бокалы для шампанского - от 300 руб</li>
+                    <li>Бокалы для коньяка - от 400 руб</li>
+                    <li>Наборы рюмок - от 600 руб</li>
                 </ul>
                 <p>Точную стоимость можно узнать после создания дизайна в <a href="designer.html">конструкторе</a>.</p>
-            `;
-        }
-        else if (lowerQuestion.includes('гаранти') || lowerQuestion.includes('вернут')) {
-            response = `
-                <p>Мы гарантируем качество нашей продукции!</p>
-                <p>Если вам что-то не понравится - мы вернем деньги или переделаем заказ.</p>
-                <p>Гравировка выполняется на современном лазерном оборудовании и не стирается со временем.</p>
-            `;
-        }
-        else if (lowerQuestion.includes('стирается') || lowerQuestion.includes('вернут')) {
-            response = `
-                <p>Мы гарантируем качество нашей продукции!</p>
-                <p>Если вам что-то не понравится - мы вернем деньги или переделаем заказ.</p>
-                <p>Гравировка выполняется на современном лазерном оборудовании и не стирается со временем.</p>
-            `;
-        }
-        else if (lowerQuestion.includes('подар') || lowerQuestion.includes('упаковк')) {
-            response = `
+            `,
+            "packaging": `
                 <p>Все наши бокалы поставляются в красивой подарочной упаковке:</p>
                 <ul>
                     <li>Картонные коробки с логотипом</li>
@@ -255,11 +311,8 @@ function initializeChatbot() {
                 </ul>
                 <p>Вы можете добавить подарочную упаковку при оформлении заказа.</p>
                 <p>Примеры упаковки можно посмотреть в <a href="gallery.html">галерее</a>.</p>
-            `;
-        }
-
-        else {
-            response = `
+            `,
+            "default": `
                 <p>Извините, я не совсем понял ваш вопрос.</p>
                 <p>Вы можете:</p>
                 <ul>
@@ -268,9 +321,9 @@ function initializeChatbot() {
                     <li>Написать нам в <a href="https://instagram.com/wine.not.pmr">Instagram</a></li>
                 </ul>
                 <p>Или задайте другой вопрос, я постараюсь помочь!</p>
-            `;
-        }
-
-        addBotMessage(response);
+            `
+        };
+        
+        return responses[type] || responses["default"];
     }
-}
+});
