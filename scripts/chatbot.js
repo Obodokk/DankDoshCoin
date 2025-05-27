@@ -35,7 +35,10 @@ function initializeChatbot() {
     chatBody.innerHTML = `
         <div class="chatbot-welcome">
             <div class="chatbot-message bot-message">
-                Привет! Чем могу помочь?
+                Привет! Я виртуальный помощник wine.not.pmr. Чем могу помочь?
+            </div>
+            <div class="chatbot-message bot-message">
+                Выберите один из вариантов ниже или задайте свой вопрос:
             </div>
         </div>
         <div id="chatbot-messages" class="chatbot-messages"></div>
@@ -57,6 +60,7 @@ function initializeChatbot() {
             <button class="chatbot-quick-btn" data-question="Цены на гравировку">Цены</button>
             <button class="chatbot-quick-btn" data-question="Сколько уйдет времени на изготовление бокалов?">Сроки изготовления</button>
             <button class="chatbot-quick-btn" data-question="Какие есть варианты упаковки?">Варианты упаковки</button>
+            <button class="chatbot-quick-btn" data-question="Какие гарантии вы предоставляете?">Гарантии</button>
         </div>
     `;
     
@@ -116,6 +120,12 @@ function initializeChatbot() {
         sessionStorage.setItem('chatHistory', JSON.stringify([]));
         document.getElementById('chatbot-messages').innerHTML = '';
         document.querySelector('.chatbot-welcome').style.display = 'block';
+        
+        // Анимация очистки
+        this.classList.add('clearing');
+        setTimeout(() => {
+            this.classList.remove('clearing');
+        }, 500);
     });
     
     if (!sessionStorage.getItem('chatHistory')) {
@@ -204,22 +214,19 @@ function initializeChatbot() {
             "сколько уйдет времени на изготовление бокалов": "manufacturing",
             "сроки изготовления": "manufacturing",
             "когда будет готов заказ": "manufacturing",
-            "сколько нужно время на изготовление": "manufacturing",
             "как сделать заказ": "ordering",
             "как оформить заказ": "ordering",
             "какие виды бокалов есть": "types",
             "какие бокалы у вас есть": "types",
-            "виды бокалов": "types",
-            "бокалы": "types",
             "сроки доставки": "delivery",
             "когда привезут заказ": "delivery",
             "цены на гравировку": "prices",
-            "сколько стоит": "prices",
             "сколько стоит гравировка": "prices",
             "какие есть варианты упаковки": "packaging",
             "как упаковываете заказы": "packaging",
-            "упаковка": "packaging",
-            "варианты упаковок": "packaging",
+            "какие гарантии вы предоставляете": "guarantee",
+            "есть ли гарантия": "guarantee",
+            "вернете деньги если не понравится": "guarantee"
         };
         
         if (exactMatches[question.toLowerCase()]) {
@@ -233,6 +240,7 @@ function initializeChatbot() {
             { words: ["доставк", "привез", "получу", "придет"], type: "delivery", priority: 1 },
             { words: ["цена", "стоимость", "сколько стоит", "ценник"], type: "prices", priority: 1 },
             { words: ["упаковк", "коробк", "подар", "упаковываете"], type: "packaging", priority: 1 },
+            { words: ["гаранти", "вернут", "передела", "качеств", "не понравится"], type: "guarantee", priority: 1 },
             { words: ["бокал", "виды", "тип", "каталог"], type: "types", priority: 0 }
         ];
         
@@ -314,6 +322,17 @@ function initializeChatbot() {
                 </ul>
                 <p>Вы можете добавить подарочную упаковку при оформлении заказа.</p>
                 <p>Примеры упаковки можно посмотреть в <a href="gallery.html">галерее</a>.</p>
+            `,
+            "guarantee": `
+                <p>Мы гарантируем качество нашей продукции!</p>
+                <ul>
+                    <li>Если вам что-то не понравится - мы вернем деньги или переделаем заказ</li>
+                    <li>Гравировка выполняется на современном лазерном оборудовании</li>
+                    <li>Надписи не стираются со временем</li>
+                    <li>Используем только качественные материалы</li>
+                    <li>Каждый бокал проверяется перед отправкой</li>
+                </ul>
+                <p>Ваше удовлетворение - наш главный приоритет!</p>
             `,
             "default": `
                 <p>Извините, я не совсем понял ваш вопрос.</p>
