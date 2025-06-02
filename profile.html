@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль | CryptoFortune</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/mob-profile.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="index.html" class="logo">Crypto<span>Fortune</span></a>
+                <nav class="nav">
+                    <a href="index.html" class="nav__link">Главная</a>
+                    <a href="lottery.html" class="nav__link">Лотерея</a>
+                    <a href="faq.html" class="nav__link">FAQ</a>
+                    <a href="about.html" class="nav__link">О нас</a>
+                </nav>
+                <div class="auth">
+                    <div class="auth-container"></div>
+                    <div class="lang-switcher">
+                        <span class="material-icons">language</span>
+                        <select id="langSelect">
+                            <option value="ru">RU</option>
+                            <option value="en">EN</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="burger" id="burger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="profile-section">
+        <div class="container">
+            <div class="profile-header fade-in">
+                <h1 class="page-title">Мой профиль</h1>
+                <div class="profile-stats">
+                    <div class="stat-card stat-card--primary">
+                        <span class="stat-icon material-icons">confirmation_number</span>
+                        <div class="stat-value" id="userTickets">0</div>
+                        <div class="stat-label">Билетов</div>
+                    </div>
+                    <div class="stat-card stat-card--secondary">
+                        <span class="stat-icon material-icons">paid</span>
+                        <div class="stat-value" id="userWins">0</div>
+                        <div class="stat-label">Выигрыши</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon material-icons">groups</span>
+                        <div class="stat-value" id="userReferrals">0</div>
+                        <div class="stat-label">Рефералы</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <!-- Основная информация -->
+                <div class="profile-card profile-card--main fade-in delay-1">
+                    <h2 class="card-title">
+                        <span class="material-icons">person</span>
+                        Основная информация
+                    </h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Имя:</div>
+                            <div class="info-value" id="profileName"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email:</div>
+                            <div class="info-value" id="profileEmail"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Дата регистрации:</div>
+                            <div class="info-value" id="profileJoinDate"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Вас пригласил:</div>
+                            <div class="info-value" id="referralParent">Не указан</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Настройки профиля -->
+                <div class="profile-card fade-in delay-2">
+                    <h2 class="card-title">
+                        <span class="material-icons">settings</span>
+                        Настройки
+                    </h2>
+                    <form id="updateProfileForm" class="profile-form">
+                        <div class="form-group">
+                            <label for="profileWallet" class="form-label">TRC20 Кошелек</label>
+                            <div class="input-with-icon">
+                                <span class="material-icons">account_balance_wallet</span>
+                                <input type="text" id="profileWallet" placeholder="TNPZbJjHpWe2q7sRv8XwL6oY9kK1mN3" required>
+                            </div>
+                            <p class="form-hint">На этот адрес будут приходить выплаты</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Смена пароля</label>
+                            <div class="password-fields">
+                                <div class="password-field">
+                                    <span class="material-icons">lock</span>
+                                    <input type="password" id="currentPassword" placeholder="Текущий пароль">
+                                    <button type="button" class="toggle-password" aria-label="Показать пароль">
+                                        <span class="material-icons">visibility</span>
+                                    </button>
+                                </div>
+                                <div class="password-field">
+                                    <span class="material-icons">lock_reset</span>
+                                    <input type="password" id="newPassword" placeholder="Новый пароль">
+                                    <button type="button" class="toggle-password" aria-label="Показать пароль">
+                                        <span class="material-icons">visibility</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn--primary btn--block">
+                            <span class="material-icons">save</span>
+                            Сохранить изменения
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Реферальная система -->
+                <div class="profile-card profile-card--referral fade-in delay-3">
+                    <h2 class="card-title">
+                        <span class="material-icons">share</span>
+                        Реферальная программа
+                    </h2>
+                    <div class="referral-content">
+                        <div class="referral-info">
+                            <p>Приглашайте друзей и получайте:</p>
+                            <ul class="referral-benefits">
+                                <li>10% от их покупок билетов</li>
+                                <li>+1 бесплатный билет за каждого</li>
+                                <li>Бонусы за активность рефералов</li>
+                            </ul>
+                        </div>
+
+                        <div class="referral-code-box">
+                            <label class="form-label">Ваш реферальный код</label>
+                            <div class="code-display" id="referralCode">CF-XXXXXX</div>
+                            <button class="btn btn--outline btn--block" id="copyReferralBtn">
+                                <span class="material-icons">content_copy</span>
+                                Копировать код
+                            </button>
+                        </div>
+
+                        <button class="btn btn--primary btn--block" id="inviteFriendBtn">
+                            <span class="material-icons">send</span>
+                            Пригласить друга
+                        </button>
+                    </div>
+                </div>
+
+                <!-- История активности -->
+                <div class="profile-card profile-card--history fade-in delay-4">
+                    <h2 class="card-title">
+                        <span class="material-icons">history</span>
+                        История активности
+                    </h2>
+                    <div class="activity-timeline" id="activityTimeline">
+                        <div class="timeline-placeholder">
+                            <span class="material-icons">pending_actions</span>
+                            <p>Ваша активность будет отображаться здесь</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__col">
+                    <a href="index.html" class="logo">Crypto<span>Fortune</span></a>
+                    <p class="footer__text">Криптолотерея нового поколения с гарантированными выплатами</p>
+                </div>
+                <div class="footer__col">
+                    <h3 class="footer__title">Навигация</h3>
+                    <ul class="footer__links">
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="lottery.html">Лотерея</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="about.html">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h3 class="footer__title">Контакты</h3>
+                    <ul class="footer__links">
+                        <li><a href="mailto:support@cryptofortune.com">support@cryptofortune.com</a></li>
+                        <li><a href="#">Telegram</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2023 CryptoFortune. Все права защищены.</p>
+                <div class="footer__links">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
