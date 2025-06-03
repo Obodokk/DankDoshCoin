@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | CryptoFortune</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/mob.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- Auth Header -->
+    <header class="auth-header">
+        <div class="container">
+            <div class="auth-header__inner">
+                <a href="index.html" class="logo">Crypto<span>Fortune</span></a>
+                <div class="lang-switcher">
+                    <span class="material-icons">language</span>
+                    <select id="langSelect">
+                        <option value="ru">RU</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth Section -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-card">
+                <h1 class="auth-title">Вход в аккаунт</h1>
+                <p class="auth-subtitle">Введите ваши данные для входа</p>
+
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail" class="form-label">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword" class="form-label">Пароль</label>
+                        <input type="password" id="loginPassword" class="form-control" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn--primary btn--block">Войти</button>
+                    </div>
+                    <div class="auth-links">
+                        <a href="register.html">Создать аккаунт</a>
+                        <a href="reset.html">Забыли пароль?</a>
+                    </div>
+                </form>
+
+                <div class="auth-social">
+                    <p>Или войдите с помощью</p>
+                    <div class="social-buttons">
+                        <button class="social-btn google">
+                            <span class="material-icons">mail</span>
+                            Google
+                        </button>
+                        <button class="social-btn twitter">
+                            <span class="material-icons">chat</span>
+                            Twitter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/lang.js"></script>
+
+</body>
+</html>
