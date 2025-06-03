@@ -1,0 +1,361 @@
+/* Мобильная адаптация */
+
+@media (max-width: 768px) {
+    /* Мобильное меню */
+    .nav.active {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background-color: var(--text-light);
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        gap: 15px;
+    }
+
+    .auth.active {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 180px;
+        left: 0;
+        width: 100%;
+        padding: 0 20px;
+        gap: 10px;
+    }
+
+    /* Герой секция */
+    .hero {
+        padding: 120px 0 60px;
+    }
+
+    .hero__title {
+        font-size: 2rem;
+    }
+
+    .hero__subtitle {
+        font-size: 1rem;
+    }
+
+    /* Джекпот */
+    .jackpot__inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .jackpot__amount {
+        font-size: 2.5rem;
+    }
+
+    /* Как это работает */
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    /* Подвал */
+    .footer__inner {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .footer__col {
+        text-align: center;
+    }
+
+    /* Формы */
+    .form-control {
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Таймер */
+    .timer {
+        gap: 10px;
+    }
+
+    .timer__item {
+        min-width: 60px;
+        padding: 10px;
+    }
+
+    .timer__value {
+        font-size: 1.5rem;
+    }
+
+    /* Кнопки */
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .btn--large {
+        padding: 12px 24px;
+    }
+
+    /* Заголовки */
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .cta__title {
+        font-size: 1.8rem;
+    }
+}
+@media (max-width: 768px) {
+    /* Лотерея */
+    .ticket-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .custom-tickets {
+        flex-direction: column;
+    }
+
+    /* FAQ */
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    /* О нас */
+    .about__content {
+        flex-direction: column;
+    }
+
+    .team-members {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Мобильное меню */
+    .nav {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+    }
+
+    .nav.active {
+        transform: translateY(0);
+    }
+
+    .nav__link {
+        display: block;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .auth {
+        position: fixed;
+        top: 180px;
+        left: 0;
+        width: 100%;
+        padding: 0 20px;
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+    }
+
+    .auth.active {
+        transform: translateY(0);
+    }
+
+    /* Лотерея */
+    .lottery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-options-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* О нас */
+    .principles-grid,
+    .stats-grid,
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Адаптация профиля для мобильных устройств */
+@media (max-width: 768px) {
+    .profile-section {
+        padding: 80px 0 30px;
+    }
+
+    .profile-header {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .profile-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .stat-card {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .profile-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .profile-card {
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .profile-card--history {
+        order: 4; /* Перемещаем историю в конец */
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Формы */
+    .profile-form input {
+        padding: 12px 15px;
+    }
+
+    .password-fields {
+        gap: 15px;
+    }
+
+    /* Реферальная система */
+    .referral-content {
+        gap: 15px;
+    }
+
+    .referral-code-box {
+        margin: 15px 0;
+    }
+
+    /* Мобильное меню */
+    .header {
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: white;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .nav.active {
+        transform: translateY(0);
+    }
+
+    .nav__link {
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .auth {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 20px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .auth.active {
+        transform: translateY(0);
+        top: 150px; /* Под меню навигации */
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        padding: 10px 15px;
+    }
+}
+
+/* Стили для мобильного меню авторизации */
+.mobile-auth-container {
+    display: none; /* По умолчанию скрыт */
+    flex-direction: column;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+}
+
+.nav.active .mobile-auth-container {
+    display: flex; /* Показываем при активном меню */
+}
+
+.mobile-user-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    font-weight: 500;
+}
+
+.mobile-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.mobile-menu-link .material-icons {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+@media (min-width: 769px) {
+    .mobile-auth-container {
+        display: none !important;
+    }
+}
