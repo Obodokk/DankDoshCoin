@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | CryptoFortune</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/mob.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- Auth Header -->
+    <header class="auth-header">
+        <div class="container">
+            <div class="auth-header__inner">
+                <a href="index.html" class="logo">Crypto<span>Fortune</span></a>
+                <div class="lang-switcher">
+                    <span class="material-icons">language</span>
+                    <select id="langSelect">
+                        <option value="ru">RU</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth Section -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-card">
+                <h1 class="auth-title">Создать аккаунт</h1>
+                <p class="auth-subtitle">Зарегистрируйтесь, чтобы участвовать в лотерее</p>
+
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="registerName" class="form-label">Имя</label>
+                        <input type="text" id="registerName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail" class="form-label">Email</label>
+                        <input type="email" id="registerEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword" class="form-label">Пароль</label>
+                        <input type="password" id="registerPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword" class="form-label">Подтвердите пароль</label>
+                        <input type="password" id="registerConfirmPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerWallet" class="form-label">TRON кошелек (TRC20)</label>
+                        <input type="text" id="registerWallet" class="form-control" placeholder="TNPZbJjHpWc2q7sRv8XwL6oY9kK1mN3..." required>
+                        <p class="form-hint">На этот адрес будут приходить выигрыши</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerReferral" class="form-label">Реферальный код (если есть)</label>
+                        <input type="text" id="registerReferral" class="form-control" placeholder="Необязательно">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" id="registerSubmitBtn" class="btn btn--primary btn--block">
+                            <span class="material-icons">how_to_reg</span>
+                            Зарегистрироваться
+                        </button>
+                    </div>
+                    <div class="auth-links">
+                        <a href="login.html">Уже есть аккаунт? Войти</a>
+                    </div>
+                </form>
+
+                <div class="auth-terms">
+                    <p>Нажимая "Зарегистрироваться", вы соглашаетесь с <a href="#">Условиями использования</a> и <a href="#">Политикой конфиденциальности</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/lang.js"></script>
+</body>
+</html>
